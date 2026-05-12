@@ -13,3 +13,11 @@ export const routes: Routes = [
   { path: 'panier', component: PanierComponent },
   { path: '**', redirectTo: '' }
 ];
+
+// Ajouter les nouvelles routes admin
+// import { DashboardComponent } from './components/admin/dashboard/dashboard.component';
+// import { BoutiquesComponent } from './components/admin/boutiques/boutiques.component';
+
+// Dans le tableau routes, ajouter :
+// { path: 'admin', component: DashboardComponent },
+// { path: 'admin/boutiques', component: BoutiquesComponent },
