@@ -1,11 +1,17 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
   <div class="container">
-    <a class="navbar-brand" routerLink="/">🏪 Monecome</a>
+    <!-- Logo -->
+    <a class="navbar-brand fw-bold d-flex align-items-center" routerLink="/">
+      <span class="fs-3">🛍️</span> 
+      <span class="ms-2">monecome</span>
+    </a>
+
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
       <span class="navbar-toggler-icon"></span>
     </button>
+
     <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav ms-auto">
+      <ul class="navbar-nav me-auto">
         <li class="nav-item">
           <a class="nav-link" routerLink="/">Accueil</a>
         </li>
@@ -13,19 +19,39 @@
           <a class="nav-link" routerLink="/produits">Produits</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" routerLink="/login">Connexion</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/register">Inscription</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/panier">🛒 Panier</a>
+          <a class="nav-link" routerLink="/boutiques">Boutiques</a>
         </li>
       </ul>
+
+      <!-- Droite : Recherche + User Menu -->
+      <div class="d-flex align-items-center gap-3">
+        <!-- Search -->
+        <div class="search-nav">
+          <input type="text" class="form-control form-control-sm" 
+                 placeholder="Rechercher..." style="width: 280px;">
+        </div>
+
+        <!-- User Menu -->
+        <div class="dropdown" *ngIf="isLoggedIn(); else loginBtn">
+          <button class="btn btn-light dropdown-toggle d-flex align-items-center gap-2" 
+                  type="button" data-bs-toggle="dropdown">
+            <span class="text-dark">{{ getUserName() }}</span>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li><a class="dropdown-item" routerLink="/admin">📊 Mon tableau de bord</a></li>
+            <li><a class="dropdown-item" routerLink="/panier">🛒 Mon panier</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item text-danger" (click)="logout()">Se déconnecter</a></li>
+          </ul>
+        </div>
+
+        <ng-template #loginBtn>
+          <a routerLink="/login" class="btn btn-outline-light">Connexion</a>
+          <a routerLink="/register" class="btn btn-primary">Inscription</a>
+        </ng-template>
+      </div>
     </div>
   </div>
 </nav>
 
-<div class="container mt-4">
-  <router-outlet></router-outlet>
-</div>
+<router-outlet></router-outlet>

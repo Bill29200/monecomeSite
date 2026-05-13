@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { initializeApp } from 'firebase/app';
-import { getDatabase, ref, get, child } from 'firebase/database';
+import { getDatabase, ref, get, child, push, update, remove, query, orderByChild, equalTo } from 'firebase/database';
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, User as FirebaseUser } from 'firebase/auth';
 
 const firebaseConfig = {
   apiKey: "AIzaSyCmjKVEyONacH6u8mxpUOi7IlpBjOxUyS8",
@@ -15,95 +16,95 @@ const firebaseConfig = {
 @Injectable({ providedIn: 'root' })
 export class FirebaseService {
   private db: any;
+  private auth: any;
 
   constructor() {
     try {
       const app = initializeApp(firebaseConfig);
       this.db = getDatabase(app);
-      console.log('✅ Firebase initialisé');
+      this.auth = getAuth(app);
+      console.log('✅ Firebase initialisé avec succès');
     } catch (error) {
       console.error('❌ Erreur Firebase:', error);
     }
   }
 
-  // Récupérer tous les produits (depuis "products")
-  async getProducts(): Promise<any[]> {
+  // ====================== AUTH ======================
+  async login(email: string, password: string) {
+    return await signInWithEmailAndPassword(this.auth, email, password);
+  }
+
+  async register(email: string, password: string) {
+    return await createUserWithEmailAndPassword(this.auth, email, password);
+  }
+
+  async logout() {
+    return await signOut(this.auth);
+  }
+
+  getCurrentUser(): FirebaseUser | null {
+    return this.auth.currentUser;
+  }
+
+  // ====================== DATABASE ======================
+  async getData(path: string): Promise<any[]> {
     try {
-      const dbRef = ref(this.db);
-      const snapshot = await get(child(dbRef, 'products'));
-      
+      const dbRef = ref(this.db, path);
+      const snapshot = await get(dbRef);
       if (snapshot.exists()) {
         const data = snapshot.val();
-        const products = Object.keys(data).map(key => ({
-          id: key,
-          ...data[key]
-        }));
-        console.log(`📦 ${products.length} produits chargés`);
-        return products;
+        return Object.keys(data).map(key => ({ id: key, ...data[key] }));
       }
-      console.log('⚠️ Aucun produit trouvé');
       return [];
     } catch (error) {
-      console.error('Erreur getProducts:', error);
+      console.error(`Erreur getData(${path}):`, error);
       return [];
     }
   }
 
-  // Récupérer un produit par son ID
-  async getProductById(productId: string): Promise<any> {
+  async getDataOnce(path: string, field: string, value: any): Promise<any[]> {
     try {
-      const dbRef = ref(this.db);
-      const snapshot = await get(child(dbRef, `products/${productId}`));
-      if (snapshot.exists()) {
-        return { id: productId, ...snapshot.val() };
-      }
-      return null;
-    } catch (error) {
-      console.error('Erreur getProductById:', error);
-      return null;
-    }
-  }
-
-  // Récupérer les boutiques (si vous en avez)
-  async getShops(): Promise<any[]> {
-    try {
-      const dbRef = ref(this.db);
-      const snapshot = await get(child(dbRef, 'shops'));
-      
+      const dbRef = ref(this.db, path);
+      const q = query(dbRef, orderByChild(field), equalTo(value));
+      const snapshot = await get(q);
       if (snapshot.exists()) {
         const data = snapshot.val();
-        const shops = Object.keys(data).map(key => ({
-          id: key,
-          ...data[key]
-        }));
-        console.log(`🏪 ${shops.length} boutiques chargées`);
-        return shops;
+        return Object.keys(data).map(key => ({ id: key, ...data[key] }));
       }
       return [];
     } catch (error) {
-      console.error('Erreur getShops:', error);
+      console.error(`Erreur getDataOnce(${path}):`, error);
       return [];
     }
   }
 
-  // Récupérer les catégories
-  async getCategories(): Promise<any[]> {
-    try {
-      const dbRef = ref(this.db);
-      const snapshot = await get(child(dbRef, 'categories'));
-      
-      if (snapshot.exists()) {
-        const data = snapshot.val();
-        const categories = Object.keys(data).map(key => ({
-          id: key,
-          ...data[key]
-        }));
-        return categories;
-      }
-      return [];
-    } catch (error) {
-      console.error('Erreur getCategories:', error);
-      return [];
-    }
+  async addData(path: string, data: any): Promise<string> {
+    const dbRef = ref(this.db, path);
+    const newRef = push(dbRef);
+    await update(newRef, data);
+    return newRef.key!;
+  }
+
+  async updateData(path: string, id: string, data: any) {
+    const dbRef = ref(this.db, `${path}/${id}`);
+    await update(dbRef, data);
+  }
+
+  async deleteData(path: string, id: string) {
+    const dbRef = ref(this.db, `${path}/${id}`);
+    await remove(dbRef);
+  }
+
+  // Méthodes spécifiques
+  async getProducts() {
+    return this.getData('products');
+  }
+
+  async getShops() {
+    return this.getData('shops');
+  }
+
+  async getBoutiques() {
+    return this.getData('boutiques');
   }
 }

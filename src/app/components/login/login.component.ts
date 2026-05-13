@@ -1,33 +1,42 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login',
-  template: `
-    <div class="row justify-content-center">
-      <div class="col-md-6">
-        <div class="card">
-          <div class="card-header">
-            <h4>Connexion</h4>
-          </div>
-          <div class="card-body">
-            <form>
-              <div class="mb-3">
-                <label class="form-label">Email</label>
-                <input type="email" class="form-control" placeholder="email@exemple.com">
-              </div>
-              <div class="mb-3">
-                <label class="form-label">Mot de passe</label>
-                <input type="password" class="form-control" placeholder="Mot de passe">
-              </div>
-              <button type="submit" class="btn btn-primary w-100">Se connecter</button>
-            </form>
-            <hr>
-            <p class="text-center">Pas de compte ? <a routerLink="/register">S'inscrire</a></p>
-          </div>
-        </div>
-      </div>
-    </div>
-  `,
-  styles: []
+  templateUrl: './login.component.html',
+  styleUrl: './login.component.css'
 })
-export class LoginComponent {}
+export class LoginComponent {
+  email: string = 'admin@monecome.com';
+  password: string = 'admin123';
+  loading: boolean = false;
+  errorMessage: string = '';
+
+  constructor(private authService: AuthService, private router: Router) {}
+
+  async onLogin() {
+    this.loading = true;
+    this.errorMessage = '';
+
+    try {
+      const user = await this.authService.login(this.email, this.password);
+      if (user) {
+        console.log('✅ Connexion réussie:', user);
+        
+        if (user.role === 'admin') {
+          this.router.navigate(['/admin']);
+        } else {
+          this.router.navigate(['/']);
+        }
+      } else {
+        this.errorMessage = 'Identifiants incorrects';
+      }
+    } catch (error: any) {
+      console.error('Erreur login:', error);
+      this.errorMessage = error.message || 'Erreur de connexion. Vérifiez vos identifiants.';
+    } finally {
+      this.loading = false;
+    }
+  }
+}

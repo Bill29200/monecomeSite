@@ -5,19 +5,21 @@ import { RegisterComponent } from './components/register/register.component';
 import { ProduitsComponent } from './components/client/produits/produits.component';
 import { PanierComponent } from './components/client/panier/panier.component';
 
+// Admin Components
+import { DashboardComponent } from './components/admin/dashboard/dashboard.component';
+
 export const routes: Routes = [
   { path: '', component: AccueilComponent },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'produits', component: ProduitsComponent },
   { path: 'panier', component: PanierComponent },
+
+  // === ADMIN ROUTES ===
+  { path: 'admin', component: DashboardComponent },
+  { path: 'admin/dashboard', component: DashboardComponent },
+  { path: 'admin/boutiques', component: DashboardComponent }, // À remplacer plus tard
+  { path: 'admin/vendeurs', component: DashboardComponent },   // À remplacer plus tard
+
   { path: '**', redirectTo: '' }
 ];
-
-// Ajouter les nouvelles routes admin
-// import { DashboardComponent } from './components/admin/dashboard/dashboard.component';
-// import { BoutiquesComponent } from './components/admin/boutiques/boutiques.component';
-
-// Dans le tableau routes, ajouter :
-// { path: 'admin', component: DashboardComponent },
-// { path: 'admin/boutiques', component: BoutiquesComponent },

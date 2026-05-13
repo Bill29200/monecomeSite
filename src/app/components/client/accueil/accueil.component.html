@@ -1,0 +1,123 @@
+<div class="modern-homepage">
+
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-overlay"></div>
+    <div class="container">
+      <div class="hero-content">
+        <h1 class="hero-title">Découvrez l'excellence</h1>
+        <p class="hero-subtitle">Trouvez les meilleurs produits parmi +{{ stats.produits }} références dans {{ stats.boutiques }} boutiques premium</p>
+        
+        <!-- Search Bar -->
+        <div class="search-container">
+          <div class="search-bar">
+            <i class="bi bi-search"></i>
+            <input type="text" 
+                   [(ngModel)]="searchTerm" 
+                   (input)="applyFilters()"
+                   placeholder="Rechercher produits, boutiques, catégories...">
+            <button class="btn-search" (click)="applyFilters()">Rechercher</button>
+          </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="hero-stats">
+          <div class="stat-item">
+            <span class="stat-number">{{ stats.boutiques }}</span>
+            <span class="stat-label">Boutiques</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number">{{ stats.produits }}</span>
+            <span class="stat-label">Produits</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number">{{ stats.categories }}</span>
+            <span class="stat-label">Catégories</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Categories -->
+  <section class="categories-section">
+    <div class="container">
+      <div class="section-header">
+        <h2>Explorer par catégorie</h2>
+      </div>
+      <div class="categories-scroll">
+        <button *ngFor="let cat of categories" 
+                class="category-chip"
+                [class.active]="selectedCategory === cat"
+                (click)="selectedCategory = cat; applyFilters()">
+          {{ cat }}
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Products Section -->
+  <section class="products-section">
+    <div class="container">
+      <div class="products-header">
+        <h2>{{ selectedCategory === 'Tous' ? 'Tous les produits' : selectedCategory }}</h2>
+        <div class="filters">
+          <select [(ngModel)]="sortBy" (change)="applyFilters()" class="sort-select">
+            <option value="pertinence">Pertinence</option>
+            <option value="prix_asc">Prix croissant</option>
+            <option value="prix_desc">Prix décroissant</option>
+            <option value="popularite">Les plus populaires</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Products Grid -->
+      <div class="products-grid">
+        <div class="product-card" 
+             *ngFor="let product of filteredProducts">
+          <div class="product-image">
+            <img [src]="product.imageUrl || 'https://picsum.photos/400/300?random=' + product.id" 
+                 [alt]="product.nom">
+            
+            <div class="product-badges">
+              <span class="badge discount" *ngIf="product.discount">-{{ product.discount }}%</span>
+              <span class="badge new" *ngIf="product.isNew">Nouveau</span>
+            </div>
+          </div>
+
+          <div class="product-info">
+            <span class="product-category">{{ product.category || product.categorie }}</span>
+            <h3 class="product-name">{{ product.nom }}</h3>
+            <p class="product-shop">
+              <i class="bi bi-shop"></i> {{ getBoutiqueName(product.boutiqueId) }}
+            </p>
+
+            <div class="product-price">
+              <span class="current-price">{{ (product.price || product.prix) | currency:'EUR':'symbol':'1.2-2' }}</span>
+              <span class="old-price" *ngIf="product.oldPrice">
+                {{ product.oldPrice | currency:'EUR':'symbol':'1.2-2' }}
+              </span>
+            </div>
+
+            <div class="product-actions">
+              <button class="btn-quickview" (click)="quickView(product)">
+                <i class="bi bi-eye"></i>
+              </button>
+              <button class="btn-cart" (click)="addToCart(product)">
+                <i class="bi bi-cart-plus"></i>
+                Ajouter
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="filteredProducts.length === 0" class="no-results">
+        <i class="bi bi-search display-1 text-muted"></i>
+        <h4>Aucun produit trouvé</h4>
+        <button class="btn btn-outline-primary" (click)="resetFilters()">Réinitialiser les filtres</button>
+      </div>
+    </div>
+  </section>
+
+</div>
