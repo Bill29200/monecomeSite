@@ -5,8 +5,11 @@ import { RegisterComponent } from './components/register/register.component';
 import { ProduitsComponent } from './components/client/produits/produits.component';
 import { PanierComponent } from './components/client/panier/panier.component';
 
-// Admin Components
+// Admin
 import { DashboardComponent } from './components/admin/dashboard/dashboard.component';
+import { BoutiquesAdminComponent } from './components/admin/boutiques-admin/boutiques-admin.component';
+import { VendeursAdminComponent } from './components/admin/vendeurs-admin/vendeurs-admin.component';
+import { AbonnementsAdminComponent } from './components/admin/abonnements-admin/abonnements-admin.component';
 
 export const routes: Routes = [
   { path: '', component: AccueilComponent },
@@ -15,11 +18,12 @@ export const routes: Routes = [
   { path: 'produits', component: ProduitsComponent },
   { path: 'panier', component: PanierComponent },
 
-  // === ADMIN ROUTES ===
+  // Admin Routes
   { path: 'admin', component: DashboardComponent },
   { path: 'admin/dashboard', component: DashboardComponent },
-  { path: 'admin/boutiques', component: DashboardComponent }, // À remplacer plus tard
-  { path: 'admin/vendeurs', component: DashboardComponent },   // À remplacer plus tard
+  { path: 'admin/boutiques', component: BoutiquesAdminComponent },
+  { path: 'admin/vendeurs', component: VendeursAdminComponent },
+  { path: 'admin/abonnements', component: AbonnementsAdminComponent },
 
   { path: '**', redirectTo: '' }
 ];

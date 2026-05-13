@@ -1,0 +1,39 @@
+<div class="admin-content">
+  <h2>Abonnements</h2>
+  <p class="text-muted">Gérez les abonnements des boutiques</p>
+
+  <!-- Plans -->
+  <div class="row g-4 mb-5">
+    <div class="col-md-4" *ngFor="let plan of plans">
+      <div class="plan-card border-{{plan.couleur}}">
+        <h4>{{ plan.nom }}</h4>
+        <h2>{{ plan.prix }} €<small>/mois</small></h2>
+        <ul class="list-unstyled">
+          <li><i class="bi bi-check-circle text-success"></i> {{ plan.produits }} produits</li>
+          <li><i class="bi bi-check-circle text-success"></i> {{ plan.categories }} catégories</li>
+          <li><i class="bi bi-check-circle text-success"></i> Support prioritaire</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Liste des boutiques -->
+  <input type="text" class="form-control mb-4" 
+         [(ngModel)]="searchTerm" 
+         (input)="filterBoutiques()"
+         placeholder="🔍 Rechercher une boutique...">
+
+  <div class="boutique-abonnement" *ngFor="let boutique of filteredBoutiques">
+    <div class="d-flex justify-content-between align-items-center">
+      <div>
+        <h5>{{ boutique.nom }}</h5>
+        <small class="text-muted">{{ boutique.vendeurEmail }}</small>
+      </div>
+      <select class="form-select w-auto">
+        <option>Gratuit</option>
+        <option selected>Basic</option>
+        <option>Premium</option>
+      </select>
+    </div>
+  </div>
+</div>

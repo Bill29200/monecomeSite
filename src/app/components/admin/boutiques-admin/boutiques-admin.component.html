@@ -1,0 +1,60 @@
+<div class="admin-content">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h2>Boutiques</h2>
+      <p class="text-muted">{{ filteredBoutiques.length }} boutiques au total</p>
+    </div>
+    <button class="btn btn-primary" (click)="openNewBoutiqueModal()">
+      <i class="bi bi-plus-lg"></i> Nouvelle boutique
+    </button>
+  </div>
+
+  <input type="text" class="form-control mb-4" [(ngModel)]="searchTerm" (input)="filterBoutiques()" placeholder="🔍 Rechercher une boutique...">
+
+  <div class="boutique-card" *ngFor="let b of filteredBoutiques">
+    <div class="d-flex align-items-center gap-3">
+      <div class="boutique-icon">🛍️</div>
+      <div class="flex-grow-1">
+        <h5>{{ b.nom }}</h5>
+        <p class="text-muted">{{ b.vendeurEmail }}</p>
+      </div>
+      <div *ngIf="b.qrCodeUrl">
+        <img [src]="b.qrCodeUrl" width="65" alt="QR">
+      </div>
+      <div>
+        <button class="btn btn-sm btn-outline-primary me-2" (click)="editBoutique(b)">Modifier</button>
+        <button class="btn btn-sm btn-outline-danger" (click)="confirmDelete(b)">Supprimer</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Nouvelle / Modifier Boutique -->
+<div class="modal" [style.display]="showModal ? 'block' : 'none'" style="background: rgba(0,0,0,0.7);">
+  <!-- ... (ton modal précédent) ... -->
+</div>
+
+<!-- Boîte de dialogue de suppression personnalisée -->
+<div class="modal" [style.display]="showDeleteConfirm ? 'block' : 'none'" style="background: rgba(0,0,0,0.8); z-index: 1100;">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-danger">
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title">⚠️ Suppression définitive</h5>
+        <button type="button" class="btn-close btn-close-white" (click)="cancelDelete()"></button>
+      </div>
+      <div class="modal-body">
+        <p><strong>Attention !</strong></p>
+        <p>Vous êtes sur le point de supprimer la boutique :</p>
+        <p class="fw-bold text-danger">"{{ boutiqueToDelete?.nom }}"</p>
+        <p class="text-danger">Tous les produits associés à cette boutique seront également supprimés définitivement.</p>
+        <p class="small text-muted">Cette action est irréversible.</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" (click)="cancelDelete()">Annuler</button>
+        <button class="btn btn-danger" (click)="deleteBoutiqueConfirmed()">
+          Oui, supprimer la boutique et ses produits
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

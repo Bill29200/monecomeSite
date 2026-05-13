@@ -1,0 +1,53 @@
+{
+  "users": {
+    "userId1": {
+      "uid": "userId1",
+      "email": "vendeur@gmail.com",
+      "nom": "Youssef",
+      "role": "vendeur",
+      "createdAt": "2026-05-10T12:00:00Z",
+      "isActive": true
+    }
+  },
+
+  "boutiques": {
+    "boutiqueId1": {
+      "id": "boutiqueId1",
+      "nom": "Vente Voiture",
+      "vendeurId": "userId1",
+      "vendeurEmail": "vendeur@gmail.com",
+      "description": "Boutique de véhicules et accessoires",
+      "logoUrl": "...",
+      "statut": "active",
+      "abonnement": "basic",
+      "createdAt": "2026-05-10T12:00:00Z"
+    }
+  },
+
+  "products": {
+    "prod1": {
+      "id": "prod1",
+      "nom": "iPhone 15 Pro",
+      "description": "...",
+      "price": 1099,
+      "stock": 15,
+      "category": "Smartphones",
+      "imageUrl": "...",
+      "boutiqueId": "boutiqueId1",
+      "vendeurId": "userId1",
+      "rating": 4.8,
+      "isFeatured": true,
+      "createdAt": "2026-05-10T12:00:00Z"
+    }
+  },
+
+  "categories": {
+    "Smartphones": true,
+    "Ordinateurs": true,
+    "Chaussures": true
+  },
+
+  "carts": { ... },
+  "orders": { ... },
+  "admins": { ... }
+}

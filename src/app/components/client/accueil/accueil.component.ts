@@ -15,16 +15,9 @@ export class AccueilComponent implements OnInit {
   searchTerm: string = '';
   selectedCategory: string = 'Tous';
   sortBy: string = 'pertinence';
-  
   loading: boolean = true;
 
-  stats = {
-    boutiques: 0,
-    produits: 0,
-    categories: 0
-  };
-
-  popularSearches: string[] = ['iPhone', 'Sneakers', 'Montre', 'Sac', 'Robot Cuisine', 'MacBook'];
+  stats = { boutiques: 0, produits: 0, categories: 0 };
 
   constructor(private firebase: FirebaseService) {}
 
@@ -37,18 +30,17 @@ export class AccueilComponent implements OnInit {
       this.produits = await this.firebase.getProducts();
       this.boutiques = await this.firebase.getShops();
 
-      // Calcul des stats
       this.stats.produits = this.produits.length;
       this.stats.boutiques = this.boutiques.length;
-      
+
       const cats = new Set(this.produits.map(p => p.category || p.categorie).filter(Boolean));
       this.categories = ['Tous', ...Array.from(cats)];
       this.stats.categories = cats.size;
 
       this.applyFilters();
-      this.loading = false;
-    } catch (error) {
-      console.error('Erreur chargement données:', error);
+    } catch (e) {
+      console.error('Erreur chargement données:', e);
+    } finally {
       this.loading = false;
     }
   }
@@ -56,24 +48,20 @@ export class AccueilComponent implements OnInit {
   applyFilters() {
     let filtered = [...this.produits];
 
-    // Recherche
     if (this.searchTerm) {
       const term = this.searchTerm.toLowerCase();
       filtered = filtered.filter(p => 
         p.nom?.toLowerCase().includes(term) || 
-        p.description?.toLowerCase().includes(term) ||
-        (p.category || p.categorie)?.toLowerCase().includes(term)
+        p.description?.toLowerCase().includes(term)
       );
     }
 
-    // Filtre catégorie
     if (this.selectedCategory !== 'Tous') {
       filtered = filtered.filter(p => 
         (p.category || p.categorie) === this.selectedCategory
       );
     }
 
-    // Tri
     switch(this.sortBy) {
       case 'prix_asc':
         filtered.sort((a, b) => (a.price || a.prix || 0) - (b.price || b.prix || 0));
@@ -124,6 +112,6 @@ export class AccueilComponent implements OnInit {
   }
 
   quickView(product: any) {
-    alert(`👁️ Aperçu rapide : ${product.nom}\nPrix : ${(product.price || product.prix)} €`);
+    alert(`👁️ ${product.nom}\nPrix : ${(product.price || product.prix)} €\nStock : ${product.stock || 'N/A'}`);
   }
 }

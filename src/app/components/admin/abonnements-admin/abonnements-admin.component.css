@@ -1,0 +1,20 @@
+.plan-card {
+  background: white;
+  padding: 30px 20px;
+  border-radius: 16px;
+  text-align: center;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+  border-top: 5px solid;
+}
+
+.plan-card.border-primary { border-color: #3b82f6; }
+.plan-card.border-success { border-color: #10b981; }
+.plan-card.border-secondary { border-color: #6b7280; }
+
+.boutique-abonnement {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}

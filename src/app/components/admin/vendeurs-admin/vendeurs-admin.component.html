@@ -1,0 +1,63 @@
+<div class="admin-content">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h2>Vendeurs</h2>
+      <p class="text-muted">{{ filteredVendeurs.length }} vendeur(s) enregistré(s)</p>
+    </div>
+    <button class="btn btn-primary" (click)="openAddModal()">
+      <i class="bi bi-plus-lg"></i> Ajouter un vendeur
+    </button>
+  </div>
+
+  <input type="text" class="form-control mb-4" 
+         [(ngModel)]="searchTerm" 
+         (input)="filterVendeurs()"
+         placeholder="🔍 Rechercher un vendeur...">
+
+  <!-- Liste des vendeurs -->
+  <div class="vendeur-card" *ngFor="let vendeur of filteredVendeurs">
+    <div class="d-flex align-items-center gap-3">
+      <div class="avatar">
+        {{ vendeur.nom?.charAt(0) || 'V' }}
+      </div>
+      <div class="flex-grow-1">
+        <h5>{{ vendeur.nom }}</h5>
+        <p class="text-muted mb-1">{{ vendeur.email }}</p>
+        <span class="badge bg-success me-2">active</span>
+        <span class="badge bg-secondary">1 boutique(s)</span>
+      </div>
+      <button class="btn btn-sm btn-outline-primary me-2">
+        <i class="bi bi-qr-code"></i> QR
+      </button>
+      <button class="btn btn-sm btn-outline-danger">
+        <i class="bi bi-trash"></i>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Ajouter Vendeur -->
+<div class="modal fade" [class.show]="showModal" style="display: {{ showModal ? 'block' : 'none' }}; background: rgba(0,0,0,0.5);">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Ajouter un nouveau vendeur</h5>
+        <button type="button" class="btn-close" (click)="showModal = false"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <label class="form-label">Nom complet</label>
+          <input type="text" class="form-control" [(ngModel)]="newVendeur.nom" placeholder="Ex: Youssef Ahmed">
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Email</label>
+          <input type="email" class="form-control" [(ngModel)]="newVendeur.email" placeholder="vendeur@email.com">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="showModal = false">Annuler</button>
+        <button type="button" class="btn btn-primary" (click)="addVendeur()">Ajouter le vendeur</button>
+      </div>
+    </div>
+  </div>
+</div>

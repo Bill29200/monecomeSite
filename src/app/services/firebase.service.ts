@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { initializeApp } from 'firebase/app';
-import { getDatabase, ref, get, child, push, update, remove, query, orderByChild, equalTo } from 'firebase/database';
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, User as FirebaseUser } from 'firebase/auth';
+import { getDatabase, ref, get, push, update, remove } from 'firebase/database';
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from 'firebase/auth';
 
 const firebaseConfig = {
   apiKey: "AIzaSyCmjKVEyONacH6u8mxpUOi7IlpBjOxUyS8",
@@ -19,68 +19,42 @@ export class FirebaseService {
   private auth: any;
 
   constructor() {
-    try {
-      const app = initializeApp(firebaseConfig);
-      this.db = getDatabase(app);
-      this.auth = getAuth(app);
-      console.log('✅ Firebase initialisé avec succès');
-    } catch (error) {
-      console.error('❌ Erreur Firebase:', error);
-    }
+    const app = initializeApp(firebaseConfig);
+    this.db = getDatabase(app);
+    this.auth = getAuth(app);
+    console.log('✅ Firebase Service initialisé');
   }
 
   // ====================== AUTH ======================
-  async login(email: string, password: string) {
-    return await signInWithEmailAndPassword(this.auth, email, password);
+  login(email: string, password: string) {
+    return signInWithEmailAndPassword(this.auth, email, password);
   }
 
-  async register(email: string, password: string) {
-    return await createUserWithEmailAndPassword(this.auth, email, password);
+  register(email: string, password: string) {
+    return createUserWithEmailAndPassword(this.auth, email, password);
   }
 
-  async logout() {
-    return await signOut(this.auth);
+  logout() {
+    return signOut(this.auth);
   }
 
-  getCurrentUser(): FirebaseUser | null {
+  getCurrentUser() {
     return this.auth.currentUser;
   }
 
-  // ====================== DATABASE ======================
+  // ====================== GENERIC ======================
   async getData(path: string): Promise<any[]> {
-    try {
-      const dbRef = ref(this.db, path);
-      const snapshot = await get(dbRef);
-      if (snapshot.exists()) {
-        const data = snapshot.val();
-        return Object.keys(data).map(key => ({ id: key, ...data[key] }));
-      }
-      return [];
-    } catch (error) {
-      console.error(`Erreur getData(${path}):`, error);
-      return [];
+    const dbRef = ref(this.db, path);
+    const snapshot = await get(dbRef);
+    if (snapshot.exists()) {
+      const data = snapshot.val();
+      return Object.keys(data).map(key => ({ id: key, ...data[key] }));
     }
-  }
-
-  async getDataOnce(path: string, field: string, value: any): Promise<any[]> {
-    try {
-      const dbRef = ref(this.db, path);
-      const q = query(dbRef, orderByChild(field), equalTo(value));
-      const snapshot = await get(q);
-      if (snapshot.exists()) {
-        const data = snapshot.val();
-        return Object.keys(data).map(key => ({ id: key, ...data[key] }));
-      }
-      return [];
-    } catch (error) {
-      console.error(`Erreur getDataOnce(${path}):`, error);
-      return [];
-    }
+    return [];
   }
 
   async addData(path: string, data: any): Promise<string> {
-    const dbRef = ref(this.db, path);
-    const newRef = push(dbRef);
+    const newRef = push(ref(this.db, path));
     await update(newRef, data);
     return newRef.key!;
   }
@@ -91,20 +65,11 @@ export class FirebaseService {
   }
 
   async deleteData(path: string, id: string) {
-    const dbRef = ref(this.db, `${path}/${id}`);
-    await remove(dbRef);
+    await remove(ref(this.db, `${path}/${id}`));
   }
 
   // Méthodes spécifiques
-  async getProducts() {
-    return this.getData('products');
-  }
-
-  async getShops() {
-    return this.getData('shops');
-  }
-
-  async getBoutiques() {
-    return this.getData('boutiques');
-  }
+  async getProducts() { return this.getData('products'); }
+  async getShops() { return this.getData('boutiques'); }   // alias pour compatibilité
+  async getBoutiques() { return this.getData('boutiques'); }
 }

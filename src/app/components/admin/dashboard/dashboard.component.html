@@ -12,7 +12,7 @@
     </div>
 
     <div class="sidebar-menu">
-      <a routerLink="/admin" class="menu-item active">
+      <a routerLink="/admin" class="menu-item" [class.active]="true">
         <i class="bi bi-speedometer2"></i> Tableau de bord
       </a>
       <a routerLink="/admin/boutiques" class="menu-item">
@@ -68,34 +68,6 @@
           <div class="stat-icon"><i class="bi bi-person"></i></div>
           <h3>{{ stats.clients }}</h3>
           <p>Clients</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Quick Actions -->
-    <div class="mt-5">
-      <h4 class="mb-3">Actions rapides</h4>
-      <div class="row g-3">
-        <div class="col-md-4">
-          <div class="action-card" (click)="navigateTo('/admin/boutiques')">
-            <i class="bi bi-shop fs-1"></i>
-            <h5>Gérer les Boutiques</h5>
-            <p>Approuver, suspendre ou voir les boutiques</p>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="action-card" (click)="navigateTo('/admin/vendeurs')">
-            <i class="bi bi-person-badge fs-1"></i>
-            <h5>Gérer les Vendeurs</h5>
-            <p>Ajouter, modifier ou bloquer des vendeurs</p>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="action-card" (click)="navigateTo('/admin/abonnements')">
-            <i class="bi bi-credit-card fs-1"></i>
-            <h5>Gérer les Abonnements</h5>
-            <p>Plans et facturation des vendeurs</p>
-          </div>
         </div>
       </div>
     </div>

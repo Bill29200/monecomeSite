@@ -1,34 +1,29 @@
 import { Injectable } from '@angular/core';
 import { FirebaseService } from './firebase.service';
-import { Produit } from '../models/produit.model';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class ProduitService {
   constructor(private firebase: FirebaseService) {}
 
-  async createProduit(produit: Produit): Promise<string> {
-    return await this.firebase.addData('produits', produit);
+  async getAllProducts() {
+    return this.firebase.getData('products');
   }
 
-  async getProduitsByBoutique(boutiqueId: string): Promise<Produit[]> {
-    return await this.firebase.getDataOnce('produits', 'boutiqueId', boutiqueId);
+  async getProductsByBoutique(boutiqueId: string) {
+    const all = await this.getAllProducts();
+    return all.filter((p: any) => p.boutiqueId === boutiqueId);
   }
 
-  async getAllProduits(): Promise<Produit[]> {
-    return await this.firebase.getData('produits');
+  async createProduct(product: any) {
+    return this.firebase.addData('products', product);
   }
 
-  async updateProduit(id: string, produit: Partial<Produit>) {
-    await this.firebase.updateData('produits', id, produit);
+  async updateProduit(id: string, data: any) {
+    await this.firebase.updateData('products', id, data);
   }
 
   async deleteProduit(id: string) {
-    await this.firebase.deleteData('produits', id);
-  }
-
-  async uploadProductImage(file: File, productId: string): Promise<string> {
-    return await this.firebase.uploadImage(file, `produits/${productId}_${Date.now()}`);
+    await this.firebase.deleteData('products', id);
+    console.log(`Produit ${id} supprimé`);
   }
 }
