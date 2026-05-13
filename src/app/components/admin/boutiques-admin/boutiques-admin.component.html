@@ -9,7 +9,8 @@
     </button>
   </div>
 
-  <input type="text" class="form-control mb-4" [(ngModel)]="searchTerm" (input)="filterBoutiques()" placeholder="🔍 Rechercher une boutique...">
+  <input type="text" class="form-control mb-4" [(ngModel)]="searchTerm" 
+         (input)="filterBoutiques()" placeholder="🔍 Rechercher une boutique...">
 
   <div class="boutique-card" *ngFor="let b of filteredBoutiques">
     <div class="d-flex align-items-center gap-3">
@@ -29,13 +30,94 @@
   </div>
 </div>
 
-<!-- Modal Nouvelle / Modifier Boutique -->
-<div class="modal" [style.display]="showModal ? 'block' : 'none'" style="background: rgba(0,0,0,0.7);">
-  <!-- ... (ton modal précédent) ... -->
+<!-- Modal Nouvelle Boutique -->
+<div class="modal" [style.display]="showModal ? 'block' : 'none'" 
+     style="background: rgba(0,0,0,0.7); position: fixed; top:0; left:0; right:0; bottom:0; z-index:1050;">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{ editingBoutique ? 'Modifier' : 'Nouvelle' }} boutique</h5>
+        <button type="button" class="btn-close" (click)="closeModal()"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <label class="form-label">Nom de la boutique *</label>
+          <input type="text" class="form-control" [(ngModel)]="newBoutique.nom">
+        </div>
+        
+        <div class="mb-3">
+          <label class="form-label">Vendeur *</label>
+          <div class="d-flex gap-2">
+            <select class="form-select flex-grow-1" [(ngModel)]="newBoutique.vendeurId" (change)="onVendeurSelected()">
+              <option value="">-- Sélectionner un vendeur --</option>
+              <option *ngFor="let v of vendeurs" [value]="v.id">{{ v.nom }} ({{ v.email }})</option>
+            </select>
+            <button type="button" class="btn btn-outline-success" (click)="openNewVendeurModal()" style="white-space: nowrap;">
+              <i class="bi bi-plus-circle"></i> Nouveau vendeur
+            </button>
+          </div>
+        </div>
+        
+        <div class="mb-3">
+          <label class="form-label">Adresse</label>
+          <input type="text" class="form-control" [(ngModel)]="newBoutique.adresse">
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Téléphone</label>
+          <input type="text" class="form-control" [(ngModel)]="newBoutique.telephone">
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Statut</label>
+          <select class="form-select" [(ngModel)]="newBoutique.statut">
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" (click)="closeModal()">Annuler</button>
+        <button class="btn btn-primary" (click)="saveBoutique()">Enregistrer</button>
+      </div>
+    </div>
+  </div>
 </div>
 
-<!-- Boîte de dialogue de suppression personnalisée -->
-<div class="modal" [style.display]="showDeleteConfirm ? 'block' : 'none'" style="background: rgba(0,0,0,0.8); z-index: 1100;">
+<!-- Modal Nouveau Vendeur -->
+<div class="modal" [style.display]="showVendeurModal ? 'block' : 'none'" 
+     style="background: rgba(0,0,0,0.7); position: fixed; top:0; left:0; right:0; bottom:0; z-index:1060;">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Ajouter un nouveau vendeur</h5>
+        <button type="button" class="btn-close" (click)="closeVendeurModal()"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <label class="form-label">Nom complet *</label>
+          <input type="text" class="form-control" [(ngModel)]="newVendeur.nom" placeholder="Ex: Jean Dupont">
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Email *</label>
+          <input type="email" class="form-control" [(ngModel)]="newVendeur.email" placeholder="vendeur@email.com">
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Mot de passe *</label>
+          <input type="password" class="form-control" [(ngModel)]="newVendeur.password" placeholder="Mot de passe">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" (click)="closeVendeurModal()">Annuler</button>
+        <button class="btn btn-success" (click)="createVendeurAndSelect()" [disabled]="savingVendeur">
+          {{ savingVendeur ? 'Création...' : 'Créer le vendeur' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Confirmation Suppression -->
+<div class="modal" [style.display]="showDeleteConfirm ? 'block' : 'none'" 
+     style="background: rgba(0,0,0,0.8); z-index: 1100; position:fixed; top:0; left:0; right:0; bottom:0;">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content border-danger">
       <div class="modal-header bg-danger text-white">
@@ -43,17 +125,12 @@
         <button type="button" class="btn-close btn-close-white" (click)="cancelDelete()"></button>
       </div>
       <div class="modal-body">
-        <p><strong>Attention !</strong></p>
-        <p>Vous êtes sur le point de supprimer la boutique :</p>
-        <p class="fw-bold text-danger">"{{ boutiqueToDelete?.nom }}"</p>
-        <p class="text-danger">Tous les produits associés à cette boutique seront également supprimés définitivement.</p>
-        <p class="small text-muted">Cette action est irréversible.</p>
+        <p>Supprimer la boutique <strong>"{{ boutiqueToDelete?.nom }}"</strong> ?</p>
+        <p class="text-danger">Tous les produits associés seront supprimés.</p>
       </div>
       <div class="modal-footer">
         <button class="btn btn-secondary" (click)="cancelDelete()">Annuler</button>
-        <button class="btn btn-danger" (click)="deleteBoutiqueConfirmed()">
-          Oui, supprimer la boutique et ses produits
-        </button>
+        <button class="btn btn-danger" (click)="deleteBoutiqueConfirmed()">Confirmer</button>
       </div>
     </div>
   </div>

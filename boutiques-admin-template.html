@@ -1,0 +1,189 @@
+<div class="admin-content">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h2>Boutiques</h2>
+      <p class="text-muted">{{ filteredBoutiques.length }} boutique(s) au total</p>
+    </div>
+    <button class="btn btn-primary" (click)="openNewBoutiqueModal()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M12 5v14M5 12h14"/>
+      </svg>
+      Nouvelle boutique
+    </button>
+  </div>
+
+  <input type="text" class="form-control mb-4" 
+         [(ngModel)]="searchTerm" 
+         (input)="filterBoutiques()"
+         placeholder="Rechercher une boutique...">
+
+  <div class="boutique-card" *ngFor="let b of filteredBoutiques">
+    <div class="d-flex align-items-center gap-3">
+      <div class="boutique-icon">🛍️</div>
+      <div class="flex-grow-1">
+        <h5>{{ b.nom }}</h5>
+        <p class="text-muted mb-1">{{ b.vendeurEmail || b.vendeurNom }}</p>
+        <span class="badge" [class.bg-success]="b.statut === 'active'" [class.bg-secondary]="b.statut !== 'active'">
+          {{ b.statut }}
+        </span>
+        <span class="badge bg-info ms-2">{{ b.abonnement }}</span>
+      </div>
+      <div *ngIf="b.qrCodeUrl">
+        <img [src]="b.qrCodeUrl" width="55" alt="QR">
+      </div>
+      <div>
+        <button class="btn btn-sm btn-outline-primary me-2" (click)="editBoutique(b)">
+          Modifier
+        </button>
+        <button class="btn btn-sm btn-outline-danger" (click)="confirmDelete(b)">
+          Supprimer
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Nouvelle / Modifier Boutique -->
+<div class="modal" [class.show]="showModal" [style.display]="showModal ? 'block' : 'none'">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">
+          {{ editingBoutique ? '✏️ Modifier la boutique' : '➕ Nouvelle boutique' }}
+        </h5>
+        <button type="button" class="btn-close" (click)="closeModal()"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Nom de la boutique *</label>
+            <input type="text" class="form-control" [(ngModel)]="newBoutique.nom" placeholder="Ex: Boutique Mode">
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Vendeur *</label>
+            <select class="form-select" [(ngModel)]="newBoutique.vendeurId" (change)="onVendeurSelected()">
+              <option value="">Sélectionner un vendeur</option>
+              <option *ngFor="let v of vendeurs" [value]="v.id">
+                {{ v.nom }} ({{ v.email }})
+              </option>
+            </select>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Statut</label>
+            <select class="form-select" [(ngModel)]="newBoutique.statut">
+              <option value="active">Active</option>
+              <option value="inactive">Inactive</option>
+              <option value="suspendue">Suspendue</option>
+            </select>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Abonnement</label>
+            <select class="form-select" [(ngModel)]="newBoutique.abonnement">
+              <option value="gratuit">Gratuit</option>
+              <option value="basic">Basic</option>
+              <option value="premium">Premium</option>
+            </select>
+          </div>
+          <div class="col-12 mb-3">
+            <label class="form-label">Description</label>
+            <textarea class="form-control" rows="2" [(ngModel)]="newBoutique.description" 
+                      placeholder="Description de la boutique..."></textarea>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Adresse</label>
+            <input type="text" class="form-control" [(ngModel)]="newBoutique.adresse" placeholder="Adresse">
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Téléphone</label>
+            <input type="tel" class="form-control" [(ngModel)]="newBoutique.telephone" placeholder="Téléphone">
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="closeModal()">Annuler</button>
+        <button type="button" class="btn btn-primary" (click)="saveBoutique()" [disabled]="isSubmitting">
+          {{ isSubmitting ? 'Enregistrement...' : (editingBoutique ? 'Mettre à jour' : 'Créer la boutique') }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Confirmation Suppression -->
+<div class="modal" [class.show]="showDeleteConfirm" [style.display]="showDeleteConfirm ? 'block' : 'none'" style="background: rgba(0,0,0,0.8); z-index: 1100;">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-danger">
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title">⚠️ Suppression définitive</h5>
+        <button type="button" class="btn-close btn-close-white" (click)="cancelDelete()"></button>
+      </div>
+      <div class="modal-body">
+        <p><strong>Attention !</strong></p>
+        <p>Vous êtes sur le point de supprimer la boutique :</p>
+        <p class="fw-bold text-danger">"{{ boutiqueToDelete?.nom }}"</p>
+        <p class="text-danger">Tous les produits associés à cette boutique seront également supprimés définitivement.</p>
+        <p class="small text-muted">Cette action est irréversible.</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" (click)="cancelDelete()">Annuler</button>
+        <button class="btn btn-danger" (click)="deleteBoutiqueConfirmed()">
+          Oui, supprimer la boutique et ses produits
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Styles additionnels -->
+<style>
+  .modal.show {
+    display: block;
+    background: rgba(0,0,0,0.5);
+  }
+  .badge {
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 500;
+  }
+  .boutique-card {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    transition: all 0.2s;
+  }
+  .boutique-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+  }
+  .boutique-icon {
+    font-size: 2rem;
+    width: 55px;
+    height: 55px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f1f5f9;
+    border-radius: 12px;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .modal-content {
+    border-radius: 20px;
+  }
+  .form-control, .form-select {
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
+  }
+  .form-control:focus, .form-select:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102,126,234,0.1);
+  }
+</style>
