@@ -24,20 +24,16 @@
         <h5>{{ vendeur.nom }}</h5>
         <p class="text-muted mb-1">{{ vendeur.email }}</p>
         <span class="badge bg-success me-2">active</span>
-        <span class="badge bg-secondary">1 boutique(s)</span>
       </div>
-      <button class="btn btn-sm btn-outline-primary me-2">
-        <i class="bi bi-qr-code"></i> QR
-      </button>
-      <button class="btn btn-sm btn-outline-danger">
-        <i class="bi bi-trash"></i>
+      <button class="btn btn-sm btn-outline-danger" (click)="confirmDeleteVendeur(vendeur)">
+        <i class="bi bi-trash"></i> Supprimer
       </button>
     </div>
   </div>
 </div>
 
 <!-- Modal Ajouter Vendeur -->
-<div class="modal fade" [class.show]="showModal" style="display: {{ showModal ? 'block' : 'none' }}; background: rgba(0,0,0,0.5);">
+<div class="modal fade" [class.show]="showModal" style="display: {{ showModal ? 'block' : 'none' }}; background: rgba(0,0,0,0.5); z-index: 1050;">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -57,6 +53,30 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" (click)="showModal = false">Annuler</button>
         <button type="button" class="btn btn-primary" (click)="addVendeur()">Ajouter le vendeur</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Boîte de dialogue de suppression Vendeur -->
+<div class="modal" [style.display]="showDeleteConfirm ? 'block' : 'none'" style="background: rgba(0,0,0,0.8); z-index: 1100;">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-danger">
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title">⚠️ Suppression définitive du vendeur</h5>
+        <button type="button" class="btn-close btn-close-white" (click)="cancelDelete()"></button>
+      </div>
+      <div class="modal-body">
+        <p><strong>Attention ! Cette action est irréversible.</strong></p>
+        <p>Vous êtes sur le point de supprimer le vendeur :</p>
+        <p class="fw-bold text-danger">"{{ vendeurToDelete?.nom }}"</p>
+        <p class="text-danger">Toutes ses boutiques et tous les produits associés seront également supprimés définitivement.</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" (click)="cancelDelete()">Annuler</button>
+        <button class="btn btn-danger" (click)="deleteVendeurConfirmed()">
+          Oui, tout supprimer
+        </button>
       </div>
     </div>
   </div>

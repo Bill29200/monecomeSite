@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FirebaseService } from '../../../services/firebase.service';
+import { BoutiqueService } from '../../../services/boutique.service';
+import { ProduitService } from '../../../services/produit.service';
 
 @Component({
   selector: 'app-vendeurs-admin',
@@ -11,7 +13,7 @@ export class VendeursAdminComponent implements OnInit {
   filteredVendeurs: any[] = [];
   searchTerm: string = '';
 
-  // Modal
+  // Modal Ajout
   showModal = false;
   newVendeur = {
     nom: '',
@@ -21,7 +23,15 @@ export class VendeursAdminComponent implements OnInit {
     createdAt: new Date().toISOString()
   };
 
-  constructor(private firebase: FirebaseService) {}
+  // Suppression
+  vendeurToDelete: any = null;
+  showDeleteConfirm = false;
+
+  constructor(
+    private firebase: FirebaseService,
+    private boutiqueService: BoutiqueService,
+    private produitService: ProduitService
+  ) {}
 
   async ngOnInit() {
     await this.loadVendeurs();
@@ -67,5 +77,67 @@ export class VendeursAdminComponent implements OnInit {
       console.error(error);
       alert("❌ Erreur lors de l'ajout du vendeur");
     }
+  }
+
+  // ====================== SUPPRESSION VENDEUR + BOUTIQUES + PRODUITS ======================
+  confirmDeleteVendeur(vendeur: any) {
+    this.vendeurToDelete = vendeur;
+    this.showDeleteConfirm = true;
+  }
+
+  async deleteVendeurConfirmed() {
+    if (!this.vendeurToDelete) return;
+
+    const confirmMsg = `Voulez-vous vraiment supprimer le vendeur "${this.vendeurToDelete.nom}" ?\n\nToutes ses boutiques et tous leurs produits seront également supprimés de façon irréversible.`;
+    
+    if (!confirm(confirmMsg)) {
+      this.cancelDelete();
+      return;
+    }
+
+    try {
+      console.log(`🗑️ Suppression du vendeur: ${this.vendeurToDelete.nom}`);
+
+      // 1. Récupérer toutes les boutiques du vendeur
+      const allBoutiques = await this.boutiqueService.getAllBoutiques();
+      const boutiquesDuVendeur = allBoutiques.filter((b: any) => 
+        b.vendeurId === this.vendeurToDelete.uid || 
+        b.vendeurId === this.vendeurToDelete.id
+      );
+
+      let totalProduitsSupprimes = 0;
+
+      // 2. Pour chaque boutique : supprimer ses produits
+      for (const boutique of boutiquesDuVendeur) {
+        const produits = await this.produitService.getProductsByBoutique(boutique.id);
+        
+        for (const produit of produits) {
+          await this.produitService.deleteProduit(produit.id);
+          totalProduitsSupprimes++;
+        }
+
+        // 3. Supprimer la boutique
+        await this.boutiqueService.deleteBoutique(boutique.id);
+        console.log(`   → Boutique supprimée: ${boutique.nom}`);
+      }
+
+      // 4. Supprimer le vendeur
+      await this.firebase.deleteData('users', this.vendeurToDelete.id);
+
+      alert(`✅ Vendeur "${this.vendeurToDelete.nom}" supprimé avec succès !\n` +
+            `${boutiquesDuVendeur.length} boutique(s) et ${totalProduitsSupprimes} produit(s) ont été supprimés.`);
+
+      this.cancelDelete();
+      await this.loadVendeurs();
+
+    } catch (error) {
+      console.error('Erreur lors de la suppression du vendeur:', error);
+      alert("❌ Une erreur est survenue lors de la suppression.");
+    }
+  }
+
+  cancelDelete() {
+    this.showDeleteConfirm = false;
+    this.vendeurToDelete = null;
   }
 }
