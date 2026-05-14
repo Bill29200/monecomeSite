@@ -30,9 +30,9 @@ export class VendeurAuthService {
       if (userData) {
         this.currentVendeur = userData;
         localStorage.setItem('vendeur', JSON.stringify(userData));
+        localStorage.removeItem('user');
         return userData;
       } else {
-        // Déconnecter si ce n'est pas un vendeur
         await this.firebase.logout();
         throw new Error('Accès réservé aux vendeurs');
       }
@@ -43,9 +43,14 @@ export class VendeurAuthService {
   }
 
   async logout() {
-    await this.firebase.logout();
+    try {
+      await this.firebase.logout();
+    } catch (error) {
+      console.error('Erreur logout:', error);
+    }
     this.currentVendeur = null;
     localStorage.removeItem('vendeur');
+    localStorage.removeItem('boutiqueVendeurId');
   }
 
   getCurrentVendeur(): User | null {

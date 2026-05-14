@@ -1,19 +1,18 @@
 <div class="vendeur-layout">
-  <!-- Sidebar Fixe -->
+  <!-- Sidebar -->
   <aside class="vendeur-sidebar">
+    <!-- Header sidebar -->
     <div class="sidebar-header">
-      <div class="d-flex align-items-center gap-2">
-        <span class="fs-3">🛍️</span>
-        <div>
-          <strong>monecome</strong><br>
-          <small class="text-muted">Espace Vendeur</small>
-        </div>
+      <div class="logo">
+        <span class="logo-icon">🛍️</span>
+        <span class="logo-text">monecome</span>
       </div>
     </div>
 
+    <!-- Sélection Boutique -->
     <div class="boutique-selector" *ngIf="boutiques.length > 0">
-      <label class="text-muted small px-3">Boutique active</label>
-      <select class="form-select form-select-sm mx-3" (change)="selectBoutique(boutiques[$any($event.target).value])">
+      <label><i class="bi bi-shop"></i> Boutique active</label>
+      <select class="form-select" (change)="selectBoutique(boutiques[$any($event.target).value])">
         <option *ngFor="let b of boutiques; let i = index" [value]="i" [selected]="boutiqueSelectionnee?.id === b.id">
           {{ b.nom }}
         </option>
@@ -21,43 +20,48 @@
     </div>
 
     <div class="boutique-selector" *ngIf="boutiques.length === 0">
-      <div class="alert alert-warning mx-3 mb-2 p-2 small">
+      <div class="no-shop-warning">
         <i class="bi bi-exclamation-triangle"></i> Aucune boutique
       </div>
     </div>
 
+    <!-- Menu Navigation -->
     <nav class="sidebar-nav">
       <a routerLink="/vendeur/dashboard" class="nav-item" routerLinkActive="active">
-        <i class="bi bi-speedometer2"></i> Tableau de bord
+        <i class="bi bi-speedometer2"></i>
+        <span>Tableau de bord</span>
       </a>
       <a routerLink="/vendeur/boutiques" class="nav-item" routerLinkActive="active">
-        <i class="bi bi-shop"></i> Mes boutiques
+        <i class="bi bi-shop"></i>
+        <span>Mes boutiques</span>
       </a>
       <a routerLink="/vendeur/produits" class="nav-item" routerLinkActive="active">
-        <i class="bi bi-box-seam"></i> Produits
+        <i class="bi bi-box-seam"></i>
+        <span>Produits</span>
       </a>
       <a routerLink="/vendeur/clients" class="nav-item" routerLinkActive="active">
-        <i class="bi bi-people"></i> Clients
+        <i class="bi bi-people"></i>
+        <span>Clients</span>
       </a>
       <a routerLink="/vendeur/commandes" class="nav-item" routerLinkActive="active">
-        <i class="bi bi-cart-check"></i> Commandes
+        <i class="bi bi-cart-check"></i>
+        <span>Commandes</span>
       </a>
     </nav>
 
+    <!-- Footer simple sans déconnexion -->
     <div class="sidebar-footer">
       <div class="vendeur-info">
-        <div class="avatar-sm">{{ getInitial() }}</div>
-        <div class="info">
-          <strong>{{ vendeurNom }}</strong>
-          <small>{{ vendeurEmail }}</small>
+        <div class="avatar">{{ getInitial() }}</div>
+        <div class="vendeur-details">
+          <div class="vendeur-name">{{ vendeurNom }}</div>
+          <div class="vendeur-email">{{ vendeurEmail }}</div>
         </div>
       </div>
-      <button class="btn btn-danger w-100 mt-3" (click)="logout()">
-        <i class="bi bi-box-arrow-right"></i> Se déconnecter
-      </button>
     </div>
   </aside>
 
+  <!-- Contenu principal -->
   <main class="vendeur-main">
     <router-outlet></router-outlet>
   </main>

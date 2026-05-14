@@ -1,0 +1,70 @@
+.user-menu .dropdown-toggle {
+  background: transparent;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 40px;
+  transition: all 0.2s;
+}
+
+.user-menu .dropdown-toggle:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.user-avatar {
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 14px;
+  color: white;
+}
+
+.user-info {
+  margin-left: 8px;
+}
+
+.user-name {
+  font-weight: 600;
+  font-size: 14px;
+  color: #1a1a2e;
+}
+
+.user-role {
+  font-size: 11px;
+  color: #6c757d;
+  margin-top: -2px;
+}
+
+.dropdown-menu {
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  border: none;
+  padding: 8px 0;
+  min-width: 220px;
+}
+
+.dropdown-item {
+  padding: 10px 20px;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.dropdown-item i {
+  width: 20px;
+  font-size: 16px;
+}
+
+.dropdown-item:hover {
+  background: #f8f9fa;
+}
+
+.dropdown-item.text-danger:hover {
+  background: #fee2e2;
+  color: #dc3545;
+}

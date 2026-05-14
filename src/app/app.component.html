@@ -1,3 +1,4 @@
+<!-- Navbar principale -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
   <div class="container">
     <!-- Logo -->
@@ -18,31 +19,35 @@
         <li class="nav-item">
           <a class="nav-link" routerLink="/produits">Produits</a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" *ngIf="!isVendeur()">
           <a class="nav-link" routerLink="/boutiques">Boutiques</a>
         </li>
       </ul>
 
-      <!-- Droite : Recherche + User Menu -->
+      <!-- Menu Utilisateur -->
       <div class="d-flex align-items-center gap-3">
-        <!-- Search -->
-        <div class="search-nav">
-          <input type="text" class="form-control form-control-sm" 
-                 placeholder="Rechercher..." style="width: 280px;">
-        </div>
-
-        <!-- User Menu -->
-        <div class="dropdown" *ngIf="isLoggedIn(); else loginBtn">
-          <button class="btn btn-light dropdown-toggle d-flex align-items-center gap-2" 
-                  type="button" data-bs-toggle="dropdown">
-            <span class="text-dark">{{ getUserName() }}</span>
-          </button>
-          <ul class="dropdown-menu dropdown-menu-end">
-            <li><a class="dropdown-item" routerLink="/admin">📊 Mon tableau de bord</a></li>
-            <li><a class="dropdown-item" routerLink="/panier">🛒 Mon panier</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item text-danger" (click)="logout()">Se déconnecter</a></li>
-          </ul>
+        <div *ngIf="isLoggedIn(); else loginBtn" class="user-menu">
+          <div class="dropdown">
+            <button class="btn btn-light dropdown-toggle d-flex align-items-center gap-2" type="button" data-bs-toggle="dropdown">
+              <div class="user-avatar">{{ getUserInitial() }}</div>
+              <div class="user-info text-start">
+                <span class="user-name">{{ getUserName() }}</span>
+                <small class="user-role d-block">{{ getUserRole() }}</small>
+              </div>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li><a class="dropdown-item" [routerLink]="getDashboardLink()">
+                <i class="bi bi-speedometer2"></i> Tableau de bord
+              </a></li>
+              <li><a class="dropdown-item" routerLink="/panier">
+                <i class="bi bi-cart"></i> Mon panier
+              </a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item text-danger" (click)="logout()">
+                <i class="bi bi-box-arrow-right"></i> Se déconnecter
+              </a></li>
+            </ul>
+          </div>
         </div>
 
         <ng-template #loginBtn>

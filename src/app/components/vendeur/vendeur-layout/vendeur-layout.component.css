@@ -1,66 +1,140 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 .vendeur-layout {
   display: flex;
   min-height: 100vh;
-  background: #f8fafc;
+  background: #f5f7fa;
 }
 
+/* ==================== SIDEBAR ==================== */
 .vendeur-sidebar {
   width: 280px;
-  background: #1e2937;
-  color: white;
+  background: #ffffff;
   display: flex;
   flex-direction: column;
   position: fixed;
   height: 100vh;
   overflow-y: auto;
-  z-index: 100;
+  border-right: 1px solid #e9ecef;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.02);
 }
 
 .sidebar-header {
-  padding: 24px;
-  border-bottom: 1px solid #334155;
+  padding: 24px 20px;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-icon {
+  font-size: 28px;
+}
+
+.logo-text {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1a1a2e;
 }
 
 .boutique-selector {
-  padding: 15px 0;
-  border-bottom: 1px solid #334155;
+  padding: 20px;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.boutique-selector label {
+  font-size: 12px;
+  font-weight: 500;
+  color: #6c757d;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.boutique-selector label i {
+  margin-right: 6px;
 }
 
 .boutique-selector select {
-  margin-top: 8px;
-  background: #334155;
-  color: white;
-  border: 1px solid #475569;
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #1a1a2e;
+  background: white;
+  cursor: pointer;
+}
+
+.boutique-selector select:focus {
+  outline: none;
+  border-color: #3b82f6;
+}
+
+.no-shop-warning {
+  background: #fff3cd;
+  color: #856404;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 13px;
+  text-align: center;
 }
 
 .sidebar-nav {
   flex: 1;
-  padding: 20px 0;
+  padding: 16px 12px;
 }
 
 .nav-item {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 12px 24px;
-  color: #cbd5e1;
+  padding: 12px 16px;
+  margin-bottom: 4px;
+  color: #4a5568;
   text-decoration: none;
-  transition: all 0.3s;
+  border-radius: 10px;
+  transition: all 0.2s;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.nav-item i {
+  font-size: 18px;
+  width: 24px;
+  color: #718096;
 }
 
 .nav-item:hover {
-  background: #334155;
-  color: white;
+  background: #f1f5f9;
+  color: #1a1a2e;
+}
+
+.nav-item:hover i {
+  color: #3b82f6;
 }
 
 .nav-item.active {
-  background: #3b82f6;
-  color: white;
+  background: #eff6ff;
+  color: #3b82f6;
+}
+
+.nav-item.active i {
+  color: #3b82f6;
 }
 
 .sidebar-footer {
   padding: 20px;
-  border-top: 1px solid #334155;
+  border-top: 1px solid #e9ecef;
+  background: #fafbfc;
 }
 
 .vendeur-info {
@@ -68,57 +142,61 @@
   align-items: center;
   gap: 12px;
   padding: 12px;
-  background: #334155;
+  background: #ffffff;
   border-radius: 12px;
-  margin-bottom: 10px;
+  border: 1px solid #e9ecef;
 }
 
-.avatar-sm {
-  width: 40px;
-  height: 40px;
-  background: #3b82f6;
-  border-radius: 50%;
+.avatar {
+  width: 44px;
+  height: 44px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: bold;
-  font-size: 1.2rem;
+  font-weight: 600;
+  font-size: 18px;
 }
 
-.info {
+.vendeur-details {
   flex: 1;
   overflow: hidden;
 }
 
-.info strong {
-  display: block;
-  font-size: 0.9rem;
+.vendeur-name {
+  font-weight: 600;
+  font-size: 14px;
+  color: #1a1a2e;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.info small {
-  display: block;
-  font-size: 0.7rem;
-  color: #94a3b8;
+.vendeur-email {
+  font-size: 11px;
+  color: #6c757d;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  margin-top: 2px;
 }
 
 .vendeur-main {
   flex: 1;
   margin-left: 280px;
-  padding: 20px;
+  padding: 24px 32px;
   min-height: 100vh;
+  background: #f5f7fa;
 }
 
 @media (max-width: 768px) {
   .vendeur-sidebar {
-    width: 240px;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
   }
   .vendeur-main {
-    margin-left: 240px;
+    margin-left: 0;
   }
 }

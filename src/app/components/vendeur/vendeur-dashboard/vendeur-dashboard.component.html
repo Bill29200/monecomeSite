@@ -1,112 +1,155 @@
-<div class="dashboard-container">
+<div class="dashboard">
+  <!-- Header -->
+  <div class="dashboard-header">
+    <h1>Tableau de bord</h1>
+    <p class="text-muted">Bienvenue dans votre espace vendeur</p>
+  </div>
+
+  <!-- Message si pas de boutique -->
   <div *ngIf="boutiques.length === 0" class="alert alert-warning">
     <i class="bi bi-exclamation-triangle"></i>
     Vous n'avez pas encore de boutique. 
-    <a routerLink="/vendeur/boutiques" class="alert-link">Créez votre première boutique</a>
+    <a routerLink="/vendeur/boutiques">Créez votre première boutique</a>
   </div>
 
-  <!-- Stats Cards - Vue globale -->
-  <div class="row g-4 mb-4">
-    <div class="col-md-3">
-      <div class="stat-card bg-gradient-purple">
-        <div class="stat-icon"><i class="bi bi-shop"></i></div>
-        <h3>{{ stats.boutiques }}</h3>
-        <p>Mes boutiques</p>
-        <small class="opacity-75">Total de vos boutiques</small>
+  <!-- Stats Cards -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon purple">
+        <i class="bi bi-shop"></i>
+      </div>
+      <div class="stat-info">
+        <span class="stat-value">{{ stats.boutiques }}</span>
+        <span class="stat-label">Mes boutiques</span>
       </div>
     </div>
-    <div class="col-md-3">
-      <div class="stat-card bg-gradient-teal">
-        <div class="stat-icon"><i class="bi bi-people"></i></div>
-        <h3>{{ stats.clientsTotal }}</h3>
-        <p>Clients total</p>
-        <small class="opacity-75">Sur toutes vos boutiques</small>
-      </div>
-    </div>
-    <div class="col-md-3">
-      <div class="stat-card bg-gradient-orange">
-        <div class="stat-icon"><i class="bi bi-cart-check"></i></div>
-        <h3>{{ stats.commandes }}</h3>
-        <p>Commandes total</p>
-        <small class="opacity-75">{{ stats.commandesEnAttente }} en attente</small>
-      </div>
-    </div>
-    <div class="col-md-3">
-      <div class="stat-card bg-gradient-green">
-        <div class="stat-icon"><i class="bi bi-currency-euro"></i></div>
-        <h3>{{ stats.chiffreAffaire }}€</h3>
-        <p>Chiffre d'affaires</p>
-        <small class="opacity-75">Total des ventes</small>
-      </div>
-    </div>
-  </div>
 
-  <!-- Stats Cards - Boutique sélectionnée -->
-  <div class="row g-4 mb-4" *ngIf="boutiqueSelectionnee">
-    <div class="col-12">
-      <div class="section-title">
-        <h5 class="mb-3">📊 Statistiques de la boutique : {{ boutiqueSelectionnee.nom }}</h5>
+    <div class="stat-card">
+      <div class="stat-icon teal">
+        <i class="bi bi-people"></i>
+      </div>
+      <div class="stat-info">
+        <span class="stat-value">{{ stats.clientsTotal }}</span>
+        <span class="stat-label">Clients total</span>
       </div>
     </div>
-    <div class="col-md-3">
-      <div class="stat-card bg-primary">
-        <div class="stat-icon"><i class="bi bi-box-seam"></i></div>
-        <h3>{{ stats.produits }}</h3>
-        <p>Produits</p>
+
+    <div class="stat-card">
+      <div class="stat-icon orange">
+        <i class="bi bi-cart-check"></i>
+      </div>
+      <div class="stat-info">
+        <span class="stat-value">{{ stats.commandes }}</span>
+        <span class="stat-label">Commandes</span>
+        <span class="stat-badge" *ngIf="stats.commandesEnAttente > 0">{{ stats.commandesEnAttente }} en attente</span>
       </div>
     </div>
-    <div class="col-md-3">
-      <div class="stat-card bg-success">
-        <div class="stat-icon"><i class="bi bi-people"></i></div>
-        <h3>{{ stats.clients }}</h3>
-        <p>Clients de cette boutique</p>
+
+    <div class="stat-card">
+      <div class="stat-icon green">
+        <i class="bi bi-currency-euro"></i>
       </div>
-    </div>
-    <div class="col-md-3">
-      <div class="stat-card bg-info">
-        <div class="stat-icon"><i class="bi bi-cart-check"></i></div>
-        <h3>{{ stats.commandes }}</h3>
-        <p>Commandes</p>
-        <small *ngIf="stats.commandesEnAttente > 0">{{ stats.commandesEnAttente }} en attente</small>
-      </div>
-    </div>
-    <div class="col-md-3">
-      <div class="stat-card bg-warning">
-        <div class="stat-icon"><i class="bi bi-currency-euro"></i></div>
-        <h3>{{ stats.chiffreAffaire }}€</h3>
-        <p>Chiffre d'affaires</p>
+      <div class="stat-info">
+        <span class="stat-value">{{ stats.chiffreAffaire }}€</span>
+        <span class="stat-label">Chiffre d'affaires</span>
       </div>
     </div>
   </div>
 
-  <!-- Actions Rapides -->
-  <div class="row" *ngIf="boutiqueSelectionnee">
-    <div class="col-md-3 mb-4">
+  <!-- Section boutique sélectionnée -->
+  <div *ngIf="boutiqueSelectionnee" class="shop-section">
+    <div class="section-header">
+      <h2>📊 {{ boutiqueSelectionnee.nom }}</h2>
+    </div>
+
+    <div class="stats-grid-small">
+      <div class="stat-card-small">
+        <div class="stat-icon-small blue">
+          <i class="bi bi-box-seam"></i>
+        </div>
+        <div class="stat-info-small">
+          <span class="stat-value-small">{{ stats.produits }}</span>
+          <span class="stat-label-small">Produits</span>
+        </div>
+      </div>
+
+      <div class="stat-card-small">
+        <div class="stat-icon-small green">
+          <i class="bi bi-people"></i>
+        </div>
+        <div class="stat-info-small">
+          <span class="stat-value-small">{{ stats.clients }}</span>
+          <span class="stat-label-small">Clients</span>
+        </div>
+      </div>
+
+      <div class="stat-card-small">
+        <div class="stat-icon-small cyan">
+          <i class="bi bi-cart-check"></i>
+        </div>
+        <div class="stat-info-small">
+          <span class="stat-value-small">{{ stats.commandes }}</span>
+          <span class="stat-label-small">Commandes</span>
+        </div>
+      </div>
+
+      <div class="stat-card-small">
+        <div class="stat-icon-small orange">
+          <i class="bi bi-currency-euro"></i>
+        </div>
+        <div class="stat-info-small">
+          <span class="stat-value-small">{{ stats.chiffreAffaire }}€</span>
+          <span class="stat-label-small">CA boutique</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Actions rapides -->
+  <div class="actions-section">
+    <div class="section-header">
+      <h2>⚡ Actions rapides</h2>
+    </div>
+
+    <div class="actions-grid">
       <div class="action-card" routerLink="/vendeur/produits">
-        <i class="bi bi-plus-circle fs-1"></i>
-        <h5>Ajouter un produit</h5>
-        <p>Ajoutez de nouveaux produits à votre boutique</p>
+        <div class="action-icon">
+          <i class="bi bi-plus-circle"></i>
+        </div>
+        <div class="action-info">
+          <h4>Ajouter un produit</h4>
+          <p>Ajoutez de nouveaux produits à votre catalogue</p>
+        </div>
       </div>
-    </div>
-    <div class="col-md-3 mb-4">
+
       <div class="action-card" routerLink="/vendeur/clients">
-        <i class="bi bi-person-plus fs-1"></i>
-        <h5>Ajouter un client</h5>
-        <p>Enregistrez un nouveau client</p>
+        <div class="action-icon">
+          <i class="bi bi-person-plus"></i>
+        </div>
+        <div class="action-info">
+          <h4>Ajouter un client</h4>
+          <p>Enregistrez un nouveau client</p>
+        </div>
       </div>
-    </div>
-    <div class="col-md-3 mb-4">
+
       <div class="action-card" routerLink="/vendeur/commandes">
-        <i class="bi bi-truck fs-1"></i>
-        <h5>Gérer les commandes</h5>
-        <p>Traitez les commandes en attente</p>
+        <div class="action-icon">
+          <i class="bi bi-truck"></i>
+        </div>
+        <div class="action-info">
+          <h4>Gérer les commandes</h4>
+          <p>Traitez les commandes en attente</p>
+        </div>
       </div>
-    </div>
-    <div class="col-md-3 mb-4">
+
       <div class="action-card" routerLink="/vendeur/boutiques">
-        <i class="bi bi-shop fs-1"></i>
-        <h5>Nouvelle boutique</h5>
-        <p>Créez une nouvelle boutique</p>
+        <div class="action-icon">
+          <i class="bi bi-shop"></i>
+        </div>
+        <div class="action-info">
+          <h4>Nouvelle boutique</h4>
+          <p>Créez une nouvelle boutique</p>
+        </div>
       </div>
     </div>
   </div>

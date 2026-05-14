@@ -31,7 +31,6 @@ export class AuthService {
         localStorage.setItem('user', JSON.stringify(userData));
         return userData;
       } else {
-        // Fallback
         this.currentUser = { uid: result.user.uid, email: result.user.email!, role: 'client', nom: '' };
         localStorage.setItem('user', JSON.stringify(this.currentUser));
         return this.currentUser;
@@ -43,7 +42,11 @@ export class AuthService {
   }
 
   async logout() {
-    await this.firebase.logout();
+    try {
+      await this.firebase.logout();
+    } catch (error) {
+      console.error('Erreur logout:', error);
+    }
     this.currentUser = null;
     localStorage.removeItem('user');
   }
