@@ -1,0 +1,120 @@
+<div class="vendeur-content">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h2><i class="bi bi-cart-check"></i> Commandes</h2>
+      <p class="text-muted">{{ filteredCommandes.length }} commande(s)</p>
+    </div>
+    <div class="stats-mini">
+      <span class="badge bg-success fs-6 me-3">
+        CA: {{ getChiffreAffaire() }}€
+      </span>
+      <span class="badge bg-primary fs-6">
+        Total: {{ getTotalCommandes() }}
+      </span>
+    </div>
+  </div>
+
+  <div class="row mb-4">
+    <div class="col-md-6">
+      <input type="text" class="form-control" 
+             [(ngModel)]="searchTerm" 
+             (input)="applyFilters()"
+             placeholder="🔍 Rechercher une commande...">
+    </div>
+    <div class="col-md-6">
+      <select class="form-select" [(ngModel)]="statutFilter" (change)="applyFilters()">
+        <option *ngFor="let s of statuts" [value]="s">{{ statutsLabels[s] || s }}</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="commande-list">
+    <div class="commande-card" *ngFor="let commande of filteredCommandes">
+      <div class="commande-header">
+        <div class="d-flex justify-content-between align-items-center">
+          <div>
+            <strong>Commande #{{ commande.id?.slice(-6) }}</strong>
+            <span class="badge ms-2" [class]="getStatutClass(commande.statut)">
+              {{ statutsLabels[commande.statut] || commande.statut }}
+            </span>
+          </div>
+          <div class="date">{{ commande.createdAt | date:'dd/MM/yyyy HH:mm' }}</div>
+        </div>
+      </div>
+      
+      <div class="commande-body">
+        <div class="row">
+          <div class="col-md-6">
+            <p><strong>Client:</strong> {{ commande.clientNom || 'N/A' }}</p>
+            <p><strong>Email:</strong> {{ commande.clientEmail || 'N/A' }}</p>
+            <p><strong>Téléphone:</strong> {{ commande.clientTelephone || 'N/A' }}</p>
+          </div>
+          <div class="col-md-6">
+            <p><strong>Adresse de livraison:</strong></p>
+            <p class="text-muted">{{ commande.adresse || 'Non renseignée' }}</p>
+          </div>
+        </div>
+        
+        <div class="produits-list">
+          <h6>Produits commandés:</h6>
+          <table class="table table-sm">
+            <thead>
+              <tr><th>Produit</th><th>Quantité</th><th>Prix unitaire</th><th>Total</th></tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of commande.produits">
+                <td>{{ item.nom }}</td>
+                <td>{{ item.quantite }}</td>
+                <td>{{ item.prix }}€</td>
+                <td>{{ item.prix * item.quantite }}€</td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr class="table-active">
+                <td colspan="3" class="text-end"><strong>Total:</strong></td>
+                <td><strong>{{ commande.total }}€</strong></td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+      
+      <div class="commande-footer">
+        <div class="btn-group" *ngIf="commande.statut !== 'livree' && commande.statut !== 'annulee'">
+          <button class="btn btn-sm btn-success" *ngIf="commande.statut === 'en_attente'" 
+                  (click)="updateStatut(commande, 'confirmee')">
+            ✅ Confirmer
+          </button>
+          <button class="btn btn-sm btn-primary" *ngIf="commande.statut === 'confirmee'" 
+                  (click)="updateStatut(commande, 'preparation')">
+            📦 Préparer
+          </button>
+          <button class="btn btn-sm btn-info" *ngIf="commande.statut === 'preparation'" 
+                  (click)="updateStatut(commande, 'expediee')">
+            🚚 Expédier
+          </button>
+          <button class="btn btn-sm btn-success" *ngIf="commande.statut === 'expediee'" 
+                  (click)="updateStatut(commande, 'livree')">
+            🏠 Marquer livrée
+          </button>
+          <button class="btn btn-sm btn-danger" 
+                  (click)="updateStatut(commande, 'annulee')">
+            ❌ Annuler
+          </button>
+        </div>
+        <div *ngIf="commande.statut === 'livree'" class="text-success">
+          ✓ Livrée le {{ commande.updatedAt | date:'dd/MM/yyyy' }}
+        </div>
+        <div *ngIf="commande.statut === 'annulee'" class="text-danger">
+          ✗ Commande annulée
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="filteredCommandes.length === 0" class="empty-state">
+    <i class="bi bi-cart-x display-1 text-muted"></i>
+    <h4>Aucune commande</h4>
+    <p>Les commandes de vos clients apparaîtront ici</p>
+  </div>
+</div>

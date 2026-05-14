@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { initializeApp } from 'firebase/app';
 import { getDatabase, ref, get, push, update, remove } from 'firebase/database';
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from 'firebase/auth';
+import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 const firebaseConfig = {
   apiKey: "AIzaSyCmjKVEyONacH6u8mxpUOi7IlpBjOxUyS8",
@@ -17,11 +18,13 @@ const firebaseConfig = {
 export class FirebaseService {
   private db: any;
   private auth: any;
+  private storage: any;
 
   constructor() {
     const app = initializeApp(firebaseConfig);
     this.db = getDatabase(app);
     this.auth = getAuth(app);
+    this.storage = getStorage(app);
     console.log('✅ Firebase Service initialisé');
   }
 
@@ -53,6 +56,11 @@ export class FirebaseService {
     return [];
   }
 
+  async getDataOnce(path: string, field: string, value: string): Promise<any[]> {
+    const allData = await this.getData(path);
+    return allData.filter((item: any) => item[field] === value);
+  }
+
   async addData(path: string, data: any): Promise<string> {
     const newRef = push(ref(this.db, path));
     await update(newRef, data);
@@ -68,8 +76,23 @@ export class FirebaseService {
     await remove(ref(this.db, `${path}/${id}`));
   }
 
-  // Méthodes spécifiques
+  // ====================== STORAGE ======================
+  async uploadImage(file: File, path: string): Promise<string> {
+    try {
+      console.log('📤 Uploading image...', path);
+      const imageRef = storageRef(this.storage, path);
+      const snapshot = await uploadBytes(imageRef, file);
+      const downloadURL = await getDownloadURL(snapshot.ref);
+      console.log('✅ Image uploaded:', downloadURL);
+      return downloadURL;
+    } catch (error) {
+      console.error('❌ Erreur upload image:', error);
+      throw error;
+    }
+  }
+
+  // ====================== SPECIFIC ======================
   async getProducts() { return this.getData('products'); }
-  async getShops() { return this.getData('boutiques'); }   // alias pour compatibilité
+  async getShops() { return this.getData('boutiques'); }
   async getBoutiques() { return this.getData('boutiques'); }
 }

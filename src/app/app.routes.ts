@@ -11,6 +11,13 @@ import { BoutiquesAdminComponent } from './components/admin/boutiques-admin/bout
 import { VendeursAdminComponent } from './components/admin/vendeurs-admin/vendeurs-admin.component';
 import { AbonnementsAdminComponent } from './components/admin/abonnements-admin/abonnements-admin.component';
 
+// Vendeur
+import { VendeurDashboardComponent } from './components/vendeur/vendeur-dashboard/vendeur-dashboard.component';
+import { VendeurBoutiquesComponent } from './components/vendeur/vendeur-boutiques/vendeur-boutiques.component';
+import { VendeurProduitsComponent } from './components/vendeur/vendeur-produits/vendeur-produits.component';
+import { VendeurClientsComponent } from './components/vendeur/vendeur-clients/vendeur-clients.component';
+import { VendeurCommandesComponent } from './components/vendeur/vendeur-commandes/vendeur-commandes.component';
+
 export const routes: Routes = [
   { path: '', component: AccueilComponent },
   { path: 'login', component: LoginComponent },
@@ -24,6 +31,14 @@ export const routes: Routes = [
   { path: 'admin/boutiques', component: BoutiquesAdminComponent },
   { path: 'admin/vendeurs', component: VendeursAdminComponent },
   { path: 'admin/abonnements', component: AbonnementsAdminComponent },
+
+  // Vendeur Routes
+  { path: 'vendeur', component: VendeurDashboardComponent },
+  { path: 'vendeur/dashboard', component: VendeurDashboardComponent },
+  { path: 'vendeur/boutiques', component: VendeurBoutiquesComponent },
+  { path: 'vendeur/produits', component: VendeurProduitsComponent },
+  { path: 'vendeur/clients', component: VendeurClientsComponent },
+  { path: 'vendeur/commandes', component: VendeurCommandesComponent },
 
   { path: '**', redirectTo: '' }
 ];

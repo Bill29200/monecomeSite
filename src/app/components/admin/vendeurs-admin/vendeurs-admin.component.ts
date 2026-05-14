@@ -2,19 +2,18 @@ import { Component, OnInit } from '@angular/core';
 import { FirebaseService } from '../../../services/firebase.service';
 import { BoutiqueService } from '../../../services/boutique.service';
 import { ProduitService } from '../../../services/produit.service';
-import { getAuth, createUserWithEmailAndPassword, updateEmail, updatePassword } from 'firebase/auth';
+import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
 
 @Component({
   selector: 'app-vendeurs-admin',
   templateUrl: './vendeurs-admin.component.html',
-  styleUrl: './vendeurs-admin.component.css'
+  styleUrls: ['./vendeurs-admin.component.css']
 })
 export class VendeursAdminComponent implements OnInit {
   vendeurs: any[] = [];
   filteredVendeurs: any[] = [];
   searchTerm: string = '';
 
-  // Modal Ajout/Modification
   showModal = false;
   editingVendeur: any = null;
   saving = false;
@@ -28,7 +27,6 @@ export class VendeursAdminComponent implements OnInit {
     role: 'vendeur' as const
   };
 
-  // Suppression
   vendeurToDelete: any = null;
   showDeleteConfirm = false;
 
@@ -56,7 +54,6 @@ export class VendeursAdminComponent implements OnInit {
     );
   }
 
-  // ====================== AJOUT / MODIFICATION ======================
   openAddModal() {
     this.editingVendeur = null;
     this.formVendeur = {
@@ -108,10 +105,7 @@ export class VendeursAdminComponent implements OnInit {
     this.saving = true;
 
     try {
-      const auth = getAuth();
-
       if (this.editingVendeur) {
-        // ===== MODIFICATION =====
         const updateData: any = {
           nom: this.formVendeur.nom,
           telephone: this.formVendeur.telephone,
@@ -119,28 +113,15 @@ export class VendeursAdminComponent implements OnInit {
           updatedAt: new Date().toISOString()
         };
 
-        // Mise à jour Firebase Auth (email)
         if (this.formVendeur.email !== this.editingVendeur.email) {
-          const user = auth.currentUser;
-          if (user) {
-            await updateEmail(user, this.formVendeur.email);
-          }
           updateData.email = this.formVendeur.email;
-        }
-
-        // Mise à jour mot de passe si fourni
-        if (this.formVendeur.password) {
-          const user = auth.currentUser;
-          if (user) {
-            await updatePassword(user, this.formVendeur.password);
-          }
         }
 
         await this.firebase.updateData('users', this.editingVendeur.id, updateData);
         alert(`✅ Vendeur "${this.formVendeur.nom}" modifié avec succès !`);
         
       } else {
-        // ===== CRÉATION =====
+        const auth = getAuth();
         const userCredential = await createUserWithEmailAndPassword(
           auth,
           this.formVendeur.email,
@@ -158,7 +139,11 @@ export class VendeursAdminComponent implements OnInit {
         };
 
         await this.firebase.addData('users', vendeurData);
-        alert(`✅ Vendeur "${this.formVendeur.nom}" ajouté avec succès !`);
+        
+        alert(`✅ Vendeur "${this.formVendeur.nom}" créé avec succès !\n\n` +
+              `📧 Email: ${this.formVendeur.email}\n` +
+              `🔑 Mot de passe: ${this.formVendeur.password}\n\n` +
+              `Le vendeur peut maintenant se connecter sur: ${window.location.origin}/login`);
       }
 
       this.closeModal();
@@ -178,7 +163,6 @@ export class VendeursAdminComponent implements OnInit {
     }
   }
 
-  // ====================== SUPPRESSION ======================
   confirmDeleteVendeur(vendeur: any) {
     this.vendeurToDelete = vendeur;
     this.showDeleteConfirm = true;
@@ -193,7 +177,6 @@ export class VendeursAdminComponent implements OnInit {
     if (!this.vendeurToDelete) return;
 
     try {
-      // 1. Récupérer toutes les boutiques du vendeur
       const allBoutiques = await this.boutiqueService.getAllBoutiques();
       const boutiquesDuVendeur = allBoutiques.filter((b: any) => 
         b.vendeurId === this.vendeurToDelete.uid || 
@@ -202,7 +185,6 @@ export class VendeursAdminComponent implements OnInit {
 
       let totalProduitsSupprimes = 0;
 
-      // 2. Supprimer les produits et boutiques
       for (const boutique of boutiquesDuVendeur) {
         const produits = await this.produitService.getProductsByBoutique(boutique.id);
         for (const produit of produits) {
@@ -212,7 +194,6 @@ export class VendeursAdminComponent implements OnInit {
         await this.boutiqueService.deleteBoutique(boutique.id);
       }
 
-      // 3. Supprimer le vendeur
       await this.firebase.deleteData('users', this.vendeurToDelete.id);
 
       alert(`✅ Vendeur "${this.vendeurToDelete.nom}" supprimé !\n` +

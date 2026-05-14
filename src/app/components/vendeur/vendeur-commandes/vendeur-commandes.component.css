@@ -1,0 +1,53 @@
+.vendeur-content {
+  padding: 20px;
+}
+
+.stats-mini {
+  display: flex;
+  gap: 10px;
+}
+
+.commande-card {
+  background: white;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.commande-header {
+  background: #f8fafc;
+  padding: 15px 20px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.commande-body {
+  padding: 20px;
+}
+
+.commande-footer {
+  padding: 15px 20px;
+  background: #f8fafc;
+  border-top: 1px solid #e2e8f0;
+}
+
+.produits-list {
+  margin-top: 15px;
+}
+
+.table {
+  margin-bottom: 0;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 60px;
+  background: white;
+  border-radius: 16px;
+}
+
+.btn-group {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}

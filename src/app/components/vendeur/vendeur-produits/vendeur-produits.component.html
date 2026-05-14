@@ -1,0 +1,220 @@
+<div class="vendeur-content">
+  <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+    <div>
+      <h2><i class="bi bi-box-seam"></i> Mes produits</h2>
+      <p class="text-muted">{{ filteredProduits.length }} produit(s)</p>
+    </div>
+    <div class="d-flex gap-2">
+      <button class="btn btn-outline-primary" (click)="openBoutiqueModal()">
+        <i class="bi bi-shop"></i> Nouvelle boutique
+      </button>
+      <button class="btn btn-primary" (click)="openAddModal()">
+        <i class="bi bi-plus-lg"></i> Nouveau produit
+      </button>
+    </div>
+  </div>
+
+  <!-- Sélection boutique -->
+  <div class="boutique-selector mb-4" *ngIf="boutiques.length > 0">
+    <label class="fw-bold me-2">Boutique :</label>
+    <select class="form-select w-auto d-inline-block" [ngModel]="boutiqueSelectionnee" (ngModelChange)="selectBoutique($event)">
+      <option *ngFor="let b of boutiques" [ngValue]="b">{{ b.nom }}</option>
+    </select>
+  </div>
+
+  <input type="text" class="form-control mb-4" 
+         [(ngModel)]="searchTerm" 
+         (input)="filterProduits()"
+         placeholder="🔍 Rechercher un produit...">
+
+  <div class="row g-4">
+    <div class="col-md-4 col-lg-3" *ngFor="let produit of filteredProduits">
+      <div class="product-card">
+        <div class="product-image">
+          <img [src]="getImageUrl(produit)" [alt]="produit.nom">
+          <div class="product-badges">
+            <span class="badge bg-danger" *ngIf="produit.isHot">🔥 Hot</span>
+            <span class="badge bg-success" *ngIf="produit.isNew">Nouveau</span>
+          </div>
+        </div>
+        <div class="product-info">
+          <h5>{{ produit.nom }}</h5>
+          <p class="text-muted small">{{ produit.category }}</p>
+          <div class="price">
+            <span class="current">{{ produit.prix }}€</span>
+            <span class="old" *ngIf="produit.ancienPrix">{{ produit.ancienPrix }}€</span>
+          </div>
+          <div class="stock" [class.text-danger]="produit.stock < 10">
+            📦 Stock: {{ produit.stock }} unités
+          </div>
+          <div class="actions mt-2">
+            <button class="btn btn-sm btn-outline-primary me-2" (click)="openEditModal(produit)">
+              <i class="bi bi-pencil"></i> Modifier
+            </button>
+            <button class="btn btn-sm btn-outline-danger" (click)="deleteProduit(produit)">
+              <i class="bi bi-trash"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="filteredProduits.length === 0 && boutiques.length > 0" class="empty-state">
+    <i class="bi bi-box-seam display-1 text-muted"></i>
+    <h4>Aucun produit</h4>
+    <button class="btn btn-primary" (click)="openAddModal()">Ajouter votre premier produit</button>
+  </div>
+  
+  <div *ngIf="boutiques.length === 0" class="empty-state">
+    <i class="bi bi-shop display-1 text-muted"></i>
+    <h4>Aucune boutique</h4>
+    <button class="btn btn-primary" (click)="openBoutiqueModal()">Créer votre première boutique</button>
+  </div>
+</div>
+
+<!-- Modal Produit -->
+<div class="modal" [style.display]="showModal ? 'block' : 'none'" style="background: rgba(0,0,0,0.7); position:fixed; top:0; left:0; right:0; bottom:0; z-index:1050;">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{ editingProduit ? 'Modifier' : 'Nouveau' }} produit</h5>
+        <button class="btn-close" (click)="closeModal()"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label class="form-label">Boutique *</label>
+              <select class="form-select" [ngModel]="boutiqueSelectionnee" (ngModelChange)="selectBoutique($event)">
+                <option *ngFor="let b of boutiques" [ngValue]="b">{{ b.nom }}</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label class="form-label">Catégorie *</label>
+              <select class="form-select" [(ngModel)]="newProduit.category">
+                <option value="">Sélectionner</option>
+                <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        
+        <div class="mb-3">
+          <label class="form-label">Nom du produit *</label>
+          <input type="text" class="form-control" [(ngModel)]="newProduit.nom">
+        </div>
+        
+        <div class="mb-3">
+          <label class="form-label">Description</label>
+          <textarea class="form-control" rows="3" [(ngModel)]="newProduit.description"></textarea>
+        </div>
+        
+        <div class="row">
+          <div class="col-md-4">
+            <div class="mb-3">
+              <label class="form-label">Prix (€) *</label>
+              <input type="number" class="form-control" [(ngModel)]="newProduit.prix">
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="mb-3">
+              <label class="form-label">Ancien prix (€)</label>
+              <input type="number" class="form-control" [(ngModel)]="newProduit.ancienPrix">
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="mb-3">
+              <label class="form-label">Stock *</label>
+              <input type="number" class="form-control" [(ngModel)]="newProduit.stock">
+            </div>
+          </div>
+        </div>
+        
+        <!-- Upload Image -->
+        <div class="mb-3">
+          <label class="form-label">Photo du produit</label>
+          <div class="image-upload-area" (click)="fileInput.click()">
+            <input type="file" #fileInput (change)="onFileSelected($event)" accept="image/*" style="display: none;">
+            <div *ngIf="imagePreview" class="image-preview">
+              <img [src]="imagePreview" alt="Aperçu">
+              <button type="button" class="btn-remove" (click)="$event.stopPropagation(); selectedImage=null; imagePreview=null; newProduit.imageBase64=''">
+                <i class="bi bi-x-circle"></i>
+              </button>
+            </div>
+            <div *ngIf="!imagePreview" class="upload-placeholder">
+              <i class="bi bi-cloud-upload fs-1"></i>
+              <p>Cliquez pour sélectionner une image</p>
+              <small class="text-muted">JPG, PNG ou GIF (max 5MB)</small>
+            </div>
+          </div>
+        </div>
+        
+        <div class="row">
+          <div class="col-md-4">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" [(ngModel)]="newProduit.isHot" id="isHot">
+              <label class="form-check-label" for="isHot">🔥 Produit tendance</label>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" [(ngModel)]="newProduit.isNew" id="isNew">
+              <label class="form-check-label" for="isNew">🆕 Nouveau produit</label>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" [(ngModel)]="newProduit.isActive" id="isActive">
+              <label class="form-check-label" for="isActive">✓ Actif</label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" (click)="closeModal()">Annuler</button>
+        <button class="btn btn-primary" (click)="saveProduit()" [disabled]="saving">
+          {{ saving ? 'Enregistrement...' : 'Enregistrer' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Nouvelle Boutique -->
+<div class="modal" [style.display]="showBoutiqueModal ? 'block' : 'none'" style="background: rgba(0,0,0,0.7); position:fixed; top:0; left:0; right:0; bottom:0; z-index:1060;">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Créer une nouvelle boutique</h5>
+        <button class="btn-close" (click)="closeBoutiqueModal()"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <label class="form-label">Nom de la boutique *</label>
+          <input type="text" class="form-control" [(ngModel)]="newBoutiqueData.nom">
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Description</label>
+          <textarea class="form-control" rows="3" [(ngModel)]="newBoutiqueData.description"></textarea>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Adresse</label>
+          <input type="text" class="form-control" [(ngModel)]="newBoutiqueData.adresse">
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Téléphone</label>
+          <input type="tel" class="form-control" [(ngModel)]="newBoutiqueData.telephone">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" (click)="closeBoutiqueModal()">Annuler</button>
+        <button class="btn btn-primary" (click)="createBoutiqueAndSelect()" [disabled]="creatingNewBoutique">
+          {{ creatingNewBoutique ? 'Création...' : 'Créer la boutique' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

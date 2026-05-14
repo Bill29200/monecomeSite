@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 import { AppComponent } from './app.component';
 import { routes } from './app.routes';
@@ -19,6 +20,13 @@ import { BoutiquesAdminComponent } from './components/admin/boutiques-admin/bout
 import { VendeursAdminComponent } from './components/admin/vendeurs-admin/vendeurs-admin.component';
 import { AbonnementsAdminComponent } from './components/admin/abonnements-admin/abonnements-admin.component';
 
+// Vendeur Components
+import { VendeurDashboardComponent } from './components/vendeur/vendeur-dashboard/vendeur-dashboard.component';
+import { VendeurBoutiquesComponent } from './components/vendeur/vendeur-boutiques/vendeur-boutiques.component';
+import { VendeurProduitsComponent } from './components/vendeur/vendeur-produits/vendeur-produits.component';
+import { VendeurClientsComponent } from './components/vendeur/vendeur-clients/vendeur-clients.component';
+import { VendeurCommandesComponent } from './components/vendeur/vendeur-commandes/vendeur-commandes.component';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -30,11 +38,17 @@ import { AbonnementsAdminComponent } from './components/admin/abonnements-admin/
     DashboardComponent,
     BoutiquesAdminComponent,
     VendeursAdminComponent,
-    AbonnementsAdminComponent
+    AbonnementsAdminComponent,
+    VendeurDashboardComponent,
+    VendeurBoutiquesComponent,
+    VendeurProduitsComponent,
+    VendeurClientsComponent,
+    VendeurCommandesComponent
   ],
   imports: [
     BrowserModule,
-    FormsModule,           // ← Important pour ngModel
+    CommonModule,
+    FormsModule,
     RouterModule.forRoot(routes)
   ],
   providers: [],
