@@ -4,20 +4,16 @@ import { FirebaseService } from '../../../services/firebase.service';
 @Component({
   selector: 'app-accueil',
   templateUrl: './accueil.component.html',
-  styleUrl: './accueil.component.css'
+  styleUrls: ['./accueil.component.css']
 })
 export class AccueilComponent implements OnInit {
   produits: any[] = [];
-  boutiques: any[] = [];
   categories: any[] = [];
-  filteredProducts: any[] = [];
-  
-  searchTerm: string = '';
-  selectedCategory: string = 'Tous';
-  sortBy: string = 'pertinence';
+  categoriesList: any[] = [];
+  filteredCategories: any[] = [];
   loading: boolean = true;
-
-  stats = { boutiques: 0, produits: 0, categories: 0 };
+  searchTerm: string = '';
+  selectedCategorie: string = 'tous';
 
   constructor(private firebase: FirebaseService) {}
 
@@ -27,68 +23,99 @@ export class AccueilComponent implements OnInit {
 
   async loadData() {
     try {
-      this.produits = await this.firebase.getProducts();
-      this.boutiques = await this.firebase.getShops();
-
-      this.stats.produits = this.produits.length;
-      this.stats.boutiques = this.boutiques.length;
-
-      const cats = new Set(this.produits.map(p => p.category || p.categorie).filter(Boolean));
-      this.categories = ['Tous', ...Array.from(cats)];
-      this.stats.categories = cats.size;
-
-      this.applyFilters();
-    } catch (e) {
-      console.error('Erreur chargement données:', e);
-    } finally {
+      const allProduits = await this.firebase.getProducts();
+      this.produits = allProduits.filter(p => p.isActive !== false);
+      
+      // Grouper les produits par catégorie
+      const categoriesMap = new Map();
+      
+      this.produits.forEach(produit => {
+        const categorie = produit.category || 'Autres';
+        if (!categoriesMap.has(categorie)) {
+          categoriesMap.set(categorie, []);
+        }
+        categoriesMap.get(categorie).push(produit);
+      });
+      
+      this.categories = Array.from(categoriesMap.entries()).map(([nom, produits]) => ({
+        nom: nom,
+        produits: produits
+      }));
+      
+      this.categoriesList = this.categories;
+      this.filteredCategories = this.categories;
+      this.loading = false;
+    } catch (error) {
+      console.error('Erreur chargement:', error);
       this.loading = false;
     }
   }
 
-  applyFilters() {
-    let filtered = [...this.produits];
-
-    if (this.searchTerm) {
-      const term = this.searchTerm.toLowerCase();
-      filtered = filtered.filter(p => 
-        p.nom?.toLowerCase().includes(term) || 
-        p.description?.toLowerCase().includes(term)
-      );
-    }
-
-    if (this.selectedCategory !== 'Tous') {
-      filtered = filtered.filter(p => 
-        (p.category || p.categorie) === this.selectedCategory
-      );
-    }
-
-    switch(this.sortBy) {
-      case 'prix_asc':
-        filtered.sort((a, b) => (a.price || a.prix || 0) - (b.price || b.prix || 0));
-        break;
-      case 'prix_desc':
-        filtered.sort((a, b) => (b.price || b.prix || 0) - (a.price || a.prix || 0));
-        break;
-      case 'popularite':
-        filtered.sort((a, b) => (b.reviews || 0) - (a.reviews || 0));
-        break;
-      default:
-        filtered.sort((a, b) => (b.rating || 0) - (a.rating || 0));
-    }
-
-    this.filteredProducts = filtered;
-  }
-
-  resetFilters() {
+  filterByCategorie(categorie: string) {
+    this.selectedCategorie = categorie;
     this.searchTerm = '';
-    this.selectedCategory = 'Tous';
-    this.sortBy = 'pertinence';
-    this.applyFilters();
+    
+    if (categorie === 'tous') {
+      this.filteredCategories = this.categories;
+    } else {
+      const found = this.categories.find(c => c.nom === categorie);
+      this.filteredCategories = found ? [found] : [];
+    }
   }
 
-  getBoutiqueName(boutiqueId: string): string {
-    const boutique = this.boutiques.find(b => b.id === boutiqueId);
-    return boutique?.nom || 'Boutique partenaire';
+  onSearchChange() {
+    if (this.searchTerm === '') {
+      this.filterByCategorie(this.selectedCategorie);
+    }
+  }
+
+  filterProduits() {
+    if (!this.searchTerm) {
+      this.filterByCategorie(this.selectedCategorie);
+      return;
+    }
+    
+    const term = this.searchTerm.toLowerCase();
+    const filteredProduits = this.produits.filter(p => 
+      p.nom?.toLowerCase().includes(term) || 
+      p.description?.toLowerCase().includes(term)
+    );
+    
+    const categoriesMap = new Map();
+    filteredProduits.forEach(produit => {
+      const categorie = produit.category || 'Autres';
+      if (!categoriesMap.has(categorie)) {
+        categoriesMap.set(categorie, []);
+      }
+      categoriesMap.get(categorie).push(produit);
+    });
+    
+    this.filteredCategories = Array.from(categoriesMap.entries()).map(([nom, produits]) => ({
+      nom: nom,
+      produits: produits
+    }));
+  }
+
+  getDiscountPercentage(ancienPrix: number, prix: number): number {
+    if (!ancienPrix || ancienPrix <= prix) return 0;
+    return Math.round((ancienPrix - prix) / ancienPrix * 100);
+  }
+
+  getCategoryIcon(category: string): string {
+    const icons: any = {
+      'Électronique': 'bi bi-laptop',
+      'Mode': 'bi bi-bag',
+      'Maison': 'bi bi-house',
+      'Beauté': 'bi bi-droplet',
+      'Sport': 'bi bi-bicycle',
+      'Jouets': 'bi bi-toy',
+      'Livres': 'bi bi-book',
+      'Alimentation': 'bi bi-egg-fried',
+      'Auto': 'bi bi-car-front',
+      'Jardin': 'bi bi-flower1',
+      'Autres': 'bi bi-tag'
+    };
+    return icons[category] || 'bi bi-tag';
   }
 
   addToCart(product: any) {
@@ -101,17 +128,13 @@ export class AccueilComponent implements OnInit {
       cart.push({
         id: product.id,
         nom: product.nom,
-        prix: product.price || product.prix,
+        prix: product.prix || product.price,
         quantite: 1,
-        imageUrl: product.imageUrl
+        imageUrl: product.imageUrl || product.imageBase64
       });
     }
     
     localStorage.setItem('cart', JSON.stringify(cart));
     alert(`✅ ${product.nom} ajouté au panier !`);
-  }
-
-  quickView(product: any) {
-    alert(`👁️ ${product.nom}\nPrix : ${(product.price || product.prix)} €\nStock : ${product.stock || 'N/A'}`);
   }
 }

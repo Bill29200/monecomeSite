@@ -1,123 +1,94 @@
-<div class="modern-homepage">
-
+<div class="homepage">
   <!-- Hero Section -->
-  <section class="hero-section">
-    <div class="hero-overlay"></div>
+  <section class="hero">
     <div class="container">
       <div class="hero-content">
-        <h1 class="hero-title">Découvrez l'excellence</h1>
-        <p class="hero-subtitle">Trouvez les meilleurs produits parmi +{{ stats.produits }} références dans {{ stats.boutiques }} boutiques premium</p>
+        <h1 class="hero-title">Découvrez notre marketplace</h1>
+        <p class="hero-subtitle">Des milliers de produits à petits prix</p>
         
-        <!-- Search Bar -->
-        <div class="search-container">
-          <div class="search-bar">
-            <i class="bi bi-search"></i>
-            <input type="text" 
-                   [(ngModel)]="searchTerm" 
-                   (input)="applyFilters()"
-                   placeholder="Rechercher produits, boutiques, catégories...">
-            <button class="btn-search" (click)="applyFilters()">Rechercher</button>
-          </div>
+        <!-- Barre de recherche réduite -->
+        <div class="search-bar">
+          <i class="bi bi-search"></i>
+          <input 
+            type="text" 
+            [(ngModel)]="searchTerm" 
+            (input)="onSearchChange()"
+            placeholder="Rechercher un produit..."
+          />
+          <button (click)="filterProduits()">Rechercher</button>
         </div>
 
-        <!-- Stats -->
-        <div class="hero-stats">
-          <div class="stat-item">
-            <span class="stat-number">{{ stats.boutiques }}</span>
-            <span class="stat-label">Boutiques</span>
-          </div>
-          <div class="stat-item">
-            <span class="stat-number">{{ stats.produits }}</span>
-            <span class="stat-label">Produits</span>
-          </div>
-          <div class="stat-item">
-            <span class="stat-number">{{ stats.categories }}</span>
-            <span class="stat-label">Catégories</span>
-          </div>
+        <!-- Filtres catégories -->
+        <div class="filters-wrapper">
+          <button 
+            class="filter-btn" 
+            [class.active]="selectedCategorie === 'tous'"
+            (click)="filterByCategorie('tous')">
+            <i class="bi bi-grid-3x3-gap-fill"></i>
+            Tous
+          </button>
+          <button 
+            *ngFor="let cat of categoriesList" 
+            class="filter-btn"
+            [class.active]="selectedCategorie === cat.nom"
+            (click)="filterByCategorie(cat.nom)">
+            <i [class]="getCategoryIcon(cat.nom)"></i>
+            {{ cat.nom }}
+            <span class="count">{{ cat.produits.length }}</span>
+          </button>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Categories -->
-  <section class="categories-section">
-    <div class="container">
-      <div class="section-header">
-        <h2>Explorer par catégorie</h2>
-      </div>
-      <div class="categories-scroll">
-        <button *ngFor="let cat of categories" 
-                class="category-chip"
-                [class.active]="selectedCategory === cat"
-                (click)="selectedCategory = cat; applyFilters()">
-          {{ cat }}
-        </button>
-      </div>
+  <!-- Espaceur -->
+  <div class="hero-spacer"></div>
+
+  <!-- Loading -->
+  <div *ngIf="loading" class="loading">
+    <div class="spinner"></div>
+    <p>Chargement des produits...</p>
+  </div>
+
+  <!-- Produits -->
+  <div *ngIf="!loading" class="container">
+    <div *ngIf="filteredCategories.length === 0" class="empty-state">
+      <i class="bi bi-box-seam"></i>
+      <h3>Aucun produit trouvé</h3>
+      <p>Essayez une autre recherche ou catégorie</p>
     </div>
-  </section>
 
-  <!-- Products Section -->
-  <section class="products-section">
-    <div class="container">
-      <div class="products-header">
-        <h2>{{ selectedCategory === 'Tous' ? 'Tous les produits' : selectedCategory }}</h2>
-        <div class="filters">
-          <select [(ngModel)]="sortBy" (change)="applyFilters()" class="sort-select">
-            <option value="pertinence">Pertinence</option>
-            <option value="prix_asc">Prix croissant</option>
-            <option value="prix_desc">Prix décroissant</option>
-            <option value="popularite">Les plus populaires</option>
-          </select>
-        </div>
+    <div *ngFor="let category of filteredCategories" class="category-section">
+      <div class="category-header">
+        <h2>{{ category.nom }}</h2>
+        <span class="product-count">{{ category.produits.length }} produits</span>
       </div>
 
-      <!-- Products Grid -->
       <div class="products-grid">
-        <div class="product-card" 
-             *ngFor="let product of filteredProducts">
+        <div class="product-card" *ngFor="let product of category.produits">
           <div class="product-image">
-            <img [src]="product.imageUrl || 'https://picsum.photos/400/300?random=' + product.id" 
-                 [alt]="product.nom">
-            
+            <img [src]="product.imageUrl || product.imageBase64 || 'https://picsum.photos/300/300?random=' + product.id" [alt]="product.nom">
             <div class="product-badges">
-              <span class="badge discount" *ngIf="product.discount">-{{ product.discount }}%</span>
+              <span class="badge hot" *ngIf="product.isHot">🔥 Hot</span>
               <span class="badge new" *ngIf="product.isNew">Nouveau</span>
-            </div>
-          </div>
-
-          <div class="product-info">
-            <span class="product-category">{{ product.category || product.categorie }}</span>
-            <h3 class="product-name">{{ product.nom }}</h3>
-            <p class="product-shop">
-              <i class="bi bi-shop"></i> {{ getBoutiqueName(product.boutiqueId) }}
-            </p>
-
-            <div class="product-price">
-              <span class="current-price">{{ (product.price || product.prix) | currency:'EUR':'symbol':'1.2-2' }}</span>
-              <span class="old-price" *ngIf="product.oldPrice">
-                {{ product.oldPrice | currency:'EUR':'symbol':'1.2-2' }}
+              <span class="badge discount" *ngIf="product.ancienPrix && product.ancienPrix > product.prix">
+                -{{ getDiscountPercentage(product.ancienPrix, product.prix) }}%
               </span>
             </div>
-
-            <div class="product-actions">
-              <button class="btn-quickview" (click)="quickView(product)">
-                <i class="bi bi-eye"></i>
-              </button>
-              <button class="btn-cart" (click)="addToCart(product)">
-                <i class="bi bi-cart-plus"></i>
-                Ajouter
-              </button>
+          </div>
+          <div class="product-info">
+            <h3 class="product-title">{{ product.nom }}</h3>
+            <p class="product-description">{{ product.description | slice:0:70 }}{{ product.description?.length > 70 ? '...' : '' }}</p>
+            <div class="product-price">
+              <span class="current-price">{{ product.prix }}€</span>
+              <span class="old-price" *ngIf="product.ancienPrix && product.ancienPrix > product.prix">{{ product.ancienPrix }}€</span>
             </div>
+            <button class="add-to-cart" (click)="addToCart(product)">
+              <i class="bi bi-cart-plus"></i> Ajouter
+            </button>
           </div>
         </div>
       </div>
-
-      <div *ngIf="filteredProducts.length === 0" class="no-results">
-        <i class="bi bi-search display-1 text-muted"></i>
-        <h4>Aucun produit trouvé</h4>
-        <button class="btn btn-outline-primary" (click)="resetFilters()">Réinitialiser les filtres</button>
-      </div>
     </div>
-  </section>
-
+  </div>
 </div>
