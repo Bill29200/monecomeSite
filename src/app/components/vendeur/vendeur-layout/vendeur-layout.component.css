@@ -23,29 +23,9 @@
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.02);
 }
 
-.sidebar-header {
-  padding: 24px 20px;
-  border-bottom: 1px solid #e9ecef;
-}
-
-.logo {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.logo-icon {
-  font-size: 28px;
-}
-
-.logo-text {
-  font-size: 18px;
-  font-weight: 600;
-  color: #1a1a2e;
-}
-
+/* Sélection boutique - premier élément */
 .boutique-selector {
-  padding: 20px;
+  padding: 24px 20px 16px 20px;
   border-bottom: 1px solid #e9ecef;
 }
 
@@ -88,9 +68,11 @@
   text-align: center;
 }
 
+/* Menu navigation - prend tout l'espace disponible */
 .sidebar-nav {
   flex: 1;
   padding: 16px 12px;
+  overflow-y: auto;
 }
 
 .nav-item {
@@ -131,10 +113,12 @@
   color: #3b82f6;
 }
 
+/* Footer - toujours visible en bas */
 .sidebar-footer {
-  padding: 20px;
+  padding: 16px 20px 20px 20px;
   border-top: 1px solid #e9ecef;
-  background: #fafbfc;
+  background: #ffffff;
+  flex-shrink: 0;
 }
 
 .vendeur-info {
@@ -142,7 +126,7 @@
   align-items: center;
   gap: 12px;
   padding: 12px;
-  background: #ffffff;
+  background: #f8f9fa;
   border-radius: 12px;
   border: 1px solid #e9ecef;
 }
@@ -158,6 +142,7 @@
   justify-content: center;
   font-weight: 600;
   font-size: 18px;
+  flex-shrink: 0;
 }
 
 .vendeur-details {
@@ -183,6 +168,7 @@
   margin-top: 2px;
 }
 
+/* Contenu principal */
 .vendeur-main {
   flex: 1;
   margin-left: 280px;
@@ -191,12 +177,38 @@
   background: #f5f7fa;
 }
 
+/* Scrollbar personnalisée */
+.vendeur-sidebar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.vendeur-sidebar::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.vendeur-sidebar::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+.vendeur-sidebar::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* Responsive */
 @media (max-width: 768px) {
   .vendeur-sidebar {
     transform: translateX(-100%);
     transition: transform 0.3s ease;
+    z-index: 1000;
   }
+  
+  .vendeur-sidebar.open {
+    transform: translateX(0);
+  }
+  
   .vendeur-main {
     margin-left: 0;
+    padding: 16px;
   }
 }

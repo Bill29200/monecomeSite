@@ -53,11 +53,6 @@ export class VendeurLayoutComponent implements OnInit {
     });
   }
 
-  async logout() {
-    await this.vendeurAuth.logout();
-    this.router.navigate(['/login']);
-  }
-
   getInitial(): string {
     return this.vendeurNom.charAt(0).toUpperCase();
   }

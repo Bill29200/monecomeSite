@@ -1,14 +1,6 @@
 <div class="vendeur-layout">
   <!-- Sidebar -->
   <aside class="vendeur-sidebar">
-    <!-- Header sidebar -->
-    <div class="sidebar-header">
-      <div class="logo">
-        <span class="logo-icon">🛍️</span>
-        <span class="logo-text">monecome</span>
-      </div>
-    </div>
-
     <!-- Sélection Boutique -->
     <div class="boutique-selector" *ngIf="boutiques.length > 0">
       <label><i class="bi bi-shop"></i> Boutique active</label>
@@ -49,8 +41,8 @@
       </a>
     </nav>
 
-    <!-- Footer simple sans déconnexion -->
-    <div class="sidebar-footer">
+    <!-- Footer avec infos vendeur -->
+    <div class="sidebar-nav">
       <div class="vendeur-info">
         <div class="avatar">{{ getInitial() }}</div>
         <div class="vendeur-details">
