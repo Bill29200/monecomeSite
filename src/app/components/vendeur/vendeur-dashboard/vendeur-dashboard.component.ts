@@ -1,6 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { VendeurAuthService } from '../../../services/vendeur-auth.service';
 import { VendeurService } from '../../../services/vendeur.service';
 import { Boutique } from '../../../models/boutique.model';
 
@@ -23,11 +21,7 @@ export class VendeurDashboardComponent implements OnInit {
     chiffreAffaire: 0
   };
 
-  constructor(
-    private vendeurAuth: VendeurAuthService,
-    private vendeurService: VendeurService,
-    private router: Router
-  ) {}
+  constructor(private vendeurService: VendeurService) {}
 
   async ngOnInit() {
     await this.loadBoutiques();
@@ -38,16 +32,11 @@ export class VendeurDashboardComponent implements OnInit {
     this.stats.boutiques = this.boutiques.length;
     
     if (this.boutiques.length > 0) {
-      this.boutiqueSelectionnee = this.boutiques[0];
+      const savedBoutiqueId = localStorage.getItem('boutiqueVendeurId');
+      this.boutiqueSelectionnee = this.boutiques.find(b => b.id === savedBoutiqueId) || this.boutiques[0];
       await this.loadStats();
       await this.loadAllClientsCount();
     }
-  }
-
-  async selectBoutique(boutique: Boutique) {
-    this.boutiqueSelectionnee = boutique;
-    localStorage.setItem('boutiqueVendeurId', boutique.id!);
-    await this.loadStats();
   }
 
   async loadStats() {
@@ -71,20 +60,5 @@ export class VendeurDashboardComponent implements OnInit {
       totalClients += clients.length;
     }
     this.stats.clientsTotal = totalClients;
-  }
-
-  getVendeurName(): string {
-    const vendeur = this.vendeurAuth.getCurrentVendeur();
-    return vendeur?.nom || vendeur?.displayName || 'Vendeur';
-  }
-
-  getVendeurEmail(): string {
-    const vendeur = this.vendeurAuth.getCurrentVendeur();
-    return vendeur?.email || '';
-  }
-
-  async logout() {
-    await this.vendeurAuth.logout();
-    this.router.navigate(['/login']);
   }
 }

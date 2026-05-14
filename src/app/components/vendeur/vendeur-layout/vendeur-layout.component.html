@@ -1,0 +1,64 @@
+<div class="vendeur-layout">
+  <!-- Sidebar Fixe -->
+  <aside class="vendeur-sidebar">
+    <div class="sidebar-header">
+      <div class="d-flex align-items-center gap-2">
+        <span class="fs-3">🛍️</span>
+        <div>
+          <strong>monecome</strong><br>
+          <small class="text-muted">Espace Vendeur</small>
+        </div>
+      </div>
+    </div>
+
+    <div class="boutique-selector" *ngIf="boutiques.length > 0">
+      <label class="text-muted small px-3">Boutique active</label>
+      <select class="form-select form-select-sm mx-3" (change)="selectBoutique(boutiques[$any($event.target).value])">
+        <option *ngFor="let b of boutiques; let i = index" [value]="i" [selected]="boutiqueSelectionnee?.id === b.id">
+          {{ b.nom }}
+        </option>
+      </select>
+    </div>
+
+    <div class="boutique-selector" *ngIf="boutiques.length === 0">
+      <div class="alert alert-warning mx-3 mb-2 p-2 small">
+        <i class="bi bi-exclamation-triangle"></i> Aucune boutique
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a routerLink="/vendeur/dashboard" class="nav-item" routerLinkActive="active">
+        <i class="bi bi-speedometer2"></i> Tableau de bord
+      </a>
+      <a routerLink="/vendeur/boutiques" class="nav-item" routerLinkActive="active">
+        <i class="bi bi-shop"></i> Mes boutiques
+      </a>
+      <a routerLink="/vendeur/produits" class="nav-item" routerLinkActive="active">
+        <i class="bi bi-box-seam"></i> Produits
+      </a>
+      <a routerLink="/vendeur/clients" class="nav-item" routerLinkActive="active">
+        <i class="bi bi-people"></i> Clients
+      </a>
+      <a routerLink="/vendeur/commandes" class="nav-item" routerLinkActive="active">
+        <i class="bi bi-cart-check"></i> Commandes
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="vendeur-info">
+        <div class="avatar-sm">{{ getInitial() }}</div>
+        <div class="info">
+          <strong>{{ vendeurNom }}</strong>
+          <small>{{ vendeurEmail }}</small>
+        </div>
+      </div>
+      <button class="btn btn-danger w-100 mt-3" (click)="logout()">
+        <i class="bi bi-box-arrow-right"></i> Se déconnecter
+      </button>
+    </div>
+  </aside>
+
+  <main class="vendeur-main">
+    <router-outlet></router-outlet>
+  </main>
+</div>

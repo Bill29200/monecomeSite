@@ -21,6 +21,7 @@ import { VendeursAdminComponent } from './components/admin/vendeurs-admin/vendeu
 import { AbonnementsAdminComponent } from './components/admin/abonnements-admin/abonnements-admin.component';
 
 // Vendeur Components
+import { VendeurLayoutComponent } from './components/vendeur/vendeur-layout/vendeur-layout.component';
 import { VendeurDashboardComponent } from './components/vendeur/vendeur-dashboard/vendeur-dashboard.component';
 import { VendeurBoutiquesComponent } from './components/vendeur/vendeur-boutiques/vendeur-boutiques.component';
 import { VendeurProduitsComponent } from './components/vendeur/vendeur-produits/vendeur-produits.component';
@@ -39,6 +40,7 @@ import { VendeurCommandesComponent } from './components/vendeur/vendeur-commande
     BoutiquesAdminComponent,
     VendeursAdminComponent,
     AbonnementsAdminComponent,
+    VendeurLayoutComponent,
     VendeurDashboardComponent,
     VendeurBoutiquesComponent,
     VendeurProduitsComponent,
