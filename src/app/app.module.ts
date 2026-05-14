@@ -15,6 +15,7 @@ import { ProduitsComponent } from './components/client/produits/produits.compone
 import { PanierComponent } from './components/client/panier/panier.component';
 
 // Admin Components
+import { AdminLayoutComponent } from './components/admin/admin-layout/admin-layout.component';
 import { DashboardComponent } from './components/admin/dashboard/dashboard.component';
 import { BoutiquesAdminComponent } from './components/admin/boutiques-admin/boutiques-admin.component';
 import { VendeursAdminComponent } from './components/admin/vendeurs-admin/vendeurs-admin.component';
@@ -28,6 +29,9 @@ import { VendeurProduitsComponent } from './components/vendeur/vendeur-produits/
 import { VendeurClientsComponent } from './components/vendeur/vendeur-clients/vendeur-clients.component';
 import { VendeurCommandesComponent } from './components/vendeur/vendeur-commandes/vendeur-commandes.component';
 
+// Footer
+import { FooterComponent } from './components/footer/footer.component';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -36,6 +40,7 @@ import { VendeurCommandesComponent } from './components/vendeur/vendeur-commande
     RegisterComponent,
     ProduitsComponent,
     PanierComponent,
+    AdminLayoutComponent,
     DashboardComponent,
     BoutiquesAdminComponent,
     VendeursAdminComponent,
@@ -45,7 +50,8 @@ import { VendeurCommandesComponent } from './components/vendeur/vendeur-commande
     VendeurBoutiquesComponent,
     VendeurProduitsComponent,
     VendeurClientsComponent,
-    VendeurCommandesComponent
+    VendeurCommandesComponent,
+    FooterComponent
   ],
   imports: [
     BrowserModule,

@@ -6,16 +6,15 @@ import { AuthService } from '../../../services/auth.service';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
-  styleUrl: './dashboard.component.css'
+  styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
   
   stats = {
-    boutiquesActives: 1,
+    boutiquesActives: 0,
     produits: 0,
-    commandes: 0,
-    clients: 0,
-    vendeurs: 0
+    vendeurs: 0,
+    clients: 0
   };
 
   constructor(
@@ -34,7 +33,7 @@ export class DashboardComponent implements OnInit {
       const produits = await this.firebase.getData('products');
       const users = await this.firebase.getData('users');
 
-      this.stats.boutiquesActives = boutiques.length;
+      this.stats.boutiquesActives = boutiques.filter((b: any) => b.statut === 'active').length;
       this.stats.produits = produits.length;
       this.stats.vendeurs = users.filter((u: any) => u.role === 'vendeur').length;
       this.stats.clients = users.filter((u: any) => u.role === 'client').length;
@@ -44,12 +43,8 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  navigateTo(route: string) {
-    this.router.navigate([route]);
-  }
-
-  logout() {
-    this.authService.logout();
+  async logout() {
+    await this.authService.logout();
     this.router.navigate(['/login']);
   }
 }

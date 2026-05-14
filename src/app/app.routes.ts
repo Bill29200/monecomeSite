@@ -6,6 +6,7 @@ import { ProduitsComponent } from './components/client/produits/produits.compone
 import { PanierComponent } from './components/client/panier/panier.component';
 
 // Admin
+import { AdminLayoutComponent } from './components/admin/admin-layout/admin-layout.component';
 import { DashboardComponent } from './components/admin/dashboard/dashboard.component';
 import { BoutiquesAdminComponent } from './components/admin/boutiques-admin/boutiques-admin.component';
 import { VendeursAdminComponent } from './components/admin/vendeurs-admin/vendeurs-admin.component';
@@ -26,14 +27,20 @@ export const routes: Routes = [
   { path: 'produits', component: ProduitsComponent },
   { path: 'panier', component: PanierComponent },
 
-  // Admin Routes
-  { path: 'admin', component: DashboardComponent },
-  { path: 'admin/dashboard', component: DashboardComponent },
-  { path: 'admin/boutiques', component: BoutiquesAdminComponent },
-  { path: 'admin/vendeurs', component: VendeursAdminComponent },
-  { path: 'admin/abonnements', component: AbonnementsAdminComponent },
+  // Admin Routes avec layout
+  {
+    path: 'admin',
+    component: AdminLayoutComponent,
+    children: [
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+      { path: 'dashboard', component: DashboardComponent },
+      { path: 'boutiques', component: BoutiquesAdminComponent },
+      { path: 'vendeurs', component: VendeursAdminComponent },
+      { path: 'abonnements', component: AbonnementsAdminComponent }
+    ]
+  },
 
-  // Vendeur Routes (avec layout)
+  // Vendeur Routes avec layout
   {
     path: 'vendeur',
     component: VendeurLayoutComponent,

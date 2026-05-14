@@ -1,4 +1,4 @@
-/* Navbar professionnelle - Thème Vert uniquement */
+/* Navbar - Thème Vert */
 .navbar {
   background: linear-gradient(135deg, #0f766e 0%, #14b8a6 100%) !important;
   box-shadow: 0 2px 10px rgba(0,0,0,0.1);
@@ -19,7 +19,7 @@
   color: white;
 }
 
-/* Boutons */
+/* Boutons navbar */
 .btn-outline-light {
   border-color: rgba(255,255,255,0.25);
   color: white;
@@ -35,21 +35,16 @@
   transform: translateY(-1px);
 }
 
-.btn-primary {
-  background: #0f766e;
-  border: none;
-  padding: 0.45rem 1.2rem;
-  font-weight: 500;
-  transition: all 0.2s;
+.btn-light {
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.25);
+  color: white;
 }
 
-.btn-primary:hover {
-  background: #0d5c56;
-  transform: translateY(-1px);
-  box-shadow: 0 2px 8px rgba(15,118,110,0.3);
+.btn-light:hover {
+  background: rgba(255,255,255,0.2);
 }
 
-/* Séparateur vertical */
 .vr {
   width: 1px;
   height: 30px;
@@ -57,11 +52,7 @@
   margin: 0 5px;
 }
 
-/* Position relative pour le badge du panier */
-.position-relative {
-  position: relative;
-}
-
+/* Badge panier */
 .cart-badge {
   position: absolute;
   top: -8px;
@@ -72,33 +63,13 @@
   font-weight: 600;
   padding: 2px 6px;
   border-radius: 20px;
-  min-width: 18px;
-  text-align: center;
 }
 
-/* Menu utilisateur connecté */
-.dropdown-toggle {
-  background: rgba(255,255,255,0.1);
-  border: 1px solid rgba(255,255,255,0.25);
-  color: white;
-  padding: 0.45rem 1rem;
-  border-radius: 8px;
-}
-
-.dropdown-toggle:hover {
-  background: rgba(255,255,255,0.2);
-  border-color: rgba(255,255,255,0.4);
-}
-
-.dropdown-toggle i {
-  font-size: 1.1rem;
-}
-
+/* Dropdown menu */
 .dropdown-menu {
   border: none;
   border-radius: 12px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-  padding: 0.5rem 0;
   margin-top: 10px;
 }
 
@@ -122,7 +93,6 @@
   background: #fee2e2;
 }
 
-/* Auth buttons group */
 .auth-buttons {
   display: flex;
   gap: 8px;
@@ -131,41 +101,12 @@
 
 /* Responsive */
 @media (max-width: 992px) {
-  .navbar-collapse {
-    margin-top: 1rem;
-  }
-  
-  .flex-grow-1 {
-    display: none;
-  }
-  
-  .d-flex {
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 10px;
-  }
-  
-  .btn-outline-light, .btn-primary {
-    padding: 0.35rem 0.8rem;
-    font-size: 0.85rem;
-  }
-  
-  .vr {
-    display: none;
-  }
+  .flex-grow-1 { display: none; }
+  .d-flex { flex-wrap: wrap; justify-content: center; gap: 10px; }
+  .vr { display: none; }
 }
 
 @media (max-width: 768px) {
-  .navbar {
-    padding: 0.5rem 0;
-  }
-  
-  .logo-text {
-    font-size: 1.1rem;
-  }
-  
-  .auth-buttons {
-    width: 100%;
-    justify-content: center;
-  }
+  .navbar { padding: 0.5rem 0; }
+  .logo-text { font-size: 1.1rem; }
 }

@@ -1,0 +1,41 @@
+<div class="admin-layout">
+  <!-- Sidebar fixe -->
+  <aside class="admin-sidebar">
+    <div class="sidebar-header">
+      <div class="logo">
+        <span class="logo-icon">🛍️</span>
+        <span class="logo-text">Admin</span>
+      </div>
+    </div>
+
+    <nav class="sidebar-menu">
+      <a routerLink="/admin/dashboard" class="menu-item" routerLinkActive="active">
+        <i class="bi bi-speedometer2"></i>
+        <span>Dashboard</span>
+      </a>
+      <a routerLink="/admin/boutiques" class="menu-item" routerLinkActive="active">
+        <i class="bi bi-shop"></i>
+        <span>Boutiques</span>
+      </a>
+      <a routerLink="/admin/vendeurs" class="menu-item" routerLinkActive="active">
+        <i class="bi bi-people"></i>
+        <span>Vendeurs</span>
+      </a>
+      <a routerLink="/admin/abonnements" class="menu-item" routerLinkActive="active">
+        <i class="bi bi-credit-card"></i>
+        <span>Abonnements</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <button class="btn-logout" (click)="logout()">
+        <i class="bi bi-box-arrow-right"></i> Déconnexion
+      </button>
+    </div>
+  </aside>
+
+  <!-- Contenu principal -->
+  <main class="admin-main">
+    <router-outlet></router-outlet>
+  </main>
+</div>
