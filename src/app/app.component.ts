@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from './services/auth.service';
 import { VendeurAuthService } from './services/vendeur-auth.service';
-import { Router } from '@angular/router';
+import { Router, NavigationEnd } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -10,14 +10,41 @@ import { Router } from '@angular/router';
 })
 export class AppComponent implements OnInit {
   title = 'monecome';
+  cartCount: number = 0;
+  private isHome: boolean = true;
 
   constructor(
     private authService: AuthService,
     private vendeurAuthService: VendeurAuthService,
     private router: Router
-  ) {}
+  ) {
+    // Détecter la route actuelle
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        this.isHome = event.url === '/' || event.url === '';
+        this.updateCartCount();
+      }
+    });
+  }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.updateCartCount();
+    // Écouter les changements du panier
+    window.addEventListener('storage', () => this.updateCartCount());
+  }
+
+  isHomePage(): boolean {
+    return this.isHome;
+  }
+
+  updateCartCount() {
+    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+    this.cartCount = cart.reduce((total: number, item: any) => total + (item.quantite || 1), 0);
+  }
+
+  refreshPage() {
+    window.location.reload();
+  }
 
   isLoggedIn(): boolean {
     return this.authService.isLoggedIn() || this.vendeurAuthService.isLoggedIn();
@@ -76,13 +103,12 @@ export class AppComponent implements OnInit {
   }
 
   async logout() {
-    // Déconnexion selon le type d'utilisateur
     if (this.vendeurAuthService.isLoggedIn()) {
       await this.vendeurAuthService.logout();
     } else {
       await this.authService.logout();
     }
-    // Rediriger vers l'accueil
     this.router.navigate(['/']);
+    this.updateCartCount();
   }
 }

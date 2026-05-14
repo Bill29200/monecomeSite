@@ -1,10 +1,10 @@
 <!-- Navbar principale -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+<nav class="navbar navbar-expand-lg navbar-dark sticky-top">
   <div class="container">
-    <!-- Logo -->
+    <!-- Logo à gauche -->
     <a class="navbar-brand fw-bold d-flex align-items-center" routerLink="/">
-      <span class="fs-3">🛍️</span> 
-      <span class="ms-2">monecome</span>
+      <span class="logo-icon">🛍️</span>
+      <span class="logo-text">Monecome</span>
     </a>
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -12,28 +12,43 @@
     </button>
 
     <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav me-auto">
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/">Accueil</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/produits">Produits</a>
-        </li>
-        <li class="nav-item" *ngIf="!isVendeur()">
-          <a class="nav-link" routerLink="/boutiques">Boutiques</a>
-        </li>
-      </ul>
+      <!-- Espace vide pour pousser les éléments à droite -->
+      <div class="flex-grow-1"></div>
 
-      <!-- Menu Utilisateur -->
-      <div class="d-flex align-items-center gap-3">
-        <div *ngIf="isLoggedIn(); else loginBtn" class="user-menu">
+      <!-- Section droite : Boutons d'action -->
+      <div class="d-flex align-items-center gap-2">
+        <!-- Menu de navigation - visible seulement en dehors de l'accueil -->
+        <ng-container *ngIf="!isHomePage()">
+          <a routerLink="/" class="btn btn-outline-light">Accueil</a>
+          <a routerLink="/produits" class="btn btn-outline-light">Produits</a>
+          <a routerLink="/boutiques" class="btn btn-outline-light">Boutiques</a>
+          <a *ngIf="isLoggedIn()" [routerLink]="getDashboardLink()" class="btn btn-outline-light">Dashboard</a>
+          <div class="vr text-white-50 mx-1"></div>
+        </ng-container>
+
+        <!-- Panier - visible seulement en dehors de l'accueil -->
+        <a routerLink="/panier" class="btn btn-outline-light position-relative" *ngIf="!isHomePage()">
+          <i class="bi bi-cart"></i>
+          <span class="cart-badge" *ngIf="cartCount > 0">{{ cartCount }}</span>
+        </a>
+
+        <!-- Bouton Rafraîchir (toujours visible) -->
+        <button class="btn btn-outline-light" (click)="refreshPage()" title="Rafraîchir">
+          <i class="bi bi-arrow-repeat"></i>
+        </button>
+
+        <!-- Espace utilisateur -->
+        <div *ngIf="!isLoggedIn(); else userMenu" class="auth-buttons">
+          <a routerLink="/login" class="btn btn-outline-light">Connexion</a>
+          <a routerLink="/register" class="btn btn-primary ms-2">Inscription</a>
+        </div>
+
+        <!-- Menu utilisateur connecté -->
+        <ng-template #userMenu>
           <div class="dropdown">
             <button class="btn btn-light dropdown-toggle d-flex align-items-center gap-2" type="button" data-bs-toggle="dropdown">
-              <div class="user-avatar">{{ getUserInitial() }}</div>
-              <div class="user-info text-start">
-                <span class="user-name">{{ getUserName() }}</span>
-                <small class="user-role d-block">{{ getUserRole() }}</small>
-              </div>
+              <i class="bi bi-person-circle"></i>
+              <span>{{ getUserName() }}</span>
             </button>
             <ul class="dropdown-menu dropdown-menu-end">
               <li><a class="dropdown-item" [routerLink]="getDashboardLink()">
@@ -44,15 +59,10 @@
               </a></li>
               <li><hr class="dropdown-divider"></li>
               <li><a class="dropdown-item text-danger" (click)="logout()">
-                <i class="bi bi-box-arrow-right"></i> Se déconnecter
+                <i class="bi bi-box-arrow-right"></i> Déconnexion
               </a></li>
             </ul>
           </div>
-        </div>
-
-        <ng-template #loginBtn>
-          <a routerLink="/login" class="btn btn-outline-light">Connexion</a>
-          <a routerLink="/register" class="btn btn-primary">Inscription</a>
         </ng-template>
       </div>
     </div>
