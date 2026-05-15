@@ -7,7 +7,6 @@ import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
 @Component({
   selector: 'app-boutiques-admin',
   templateUrl: './boutiques-admin.component.html',
-  styleUrl: './boutiques-admin.component.css'
 })
 export class BoutiquesAdminComponent implements OnInit {
   boutiques: any[] = [];

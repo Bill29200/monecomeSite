@@ -4,7 +4,6 @@ import { VendeurService } from '../../../services/vendeur.service';
 @Component({
   selector: 'app-vendeur-clients',
   templateUrl: './vendeur-clients.component.html',
-  styleUrls: ['./vendeur-clients.component.css']
 })
 export class VendeurClientsComponent implements OnInit {
   clients: any[] = [];

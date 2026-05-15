@@ -5,8 +5,52 @@ import { VendeurAuthService } from '../../services/vendeur-auth.service';
 
 @Component({
   selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  template: `
+    <div class="auth-page">
+      <div class="auth-container">
+        <div class="auth-card">
+          <h2>Connexion</h2>
+          <p class="auth-subtitle">Connectez-vous à votre compte</p>
+          
+          <form (ngSubmit)="onLogin()">
+            <div class="form-group">
+              <label class="form-label">Email</label>
+              <div class="input-icon">
+                <i class="bi bi-envelope"></i>
+                <input type="email" class="form-control" 
+                       [(ngModel)]="email" name="email" 
+                       placeholder="exemple@email.com" required>
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label">Mot de passe</label>
+              <div class="input-icon">
+                <i class="bi bi-lock"></i>
+                <input type="password" class="form-control" 
+                       [(ngModel)]="password" name="password" 
+                       placeholder="••••••••" required>
+              </div>
+            </div>
+
+            <button type="submit" class="auth-btn" [disabled]="loading">
+              <i class="bi bi-box-arrow-in-right"></i>
+              {{ loading ? 'Connexion en cours...' : 'Se connecter' }}
+            </button>
+          </form>
+
+          <div *ngIf="errorMessage" class="alert alert-danger">
+            <i class="bi bi-exclamation-triangle"></i> {{ errorMessage }}
+          </div>
+
+          <div class="auth-footer">
+            <p>Pas encore de compte ? <a routerLink="/register">Créer un compte</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  `,
+  styles: []
 })
 export class LoginComponent {
   email: string = '';
@@ -21,43 +65,36 @@ export class LoginComponent {
   ) {}
 
   async onLogin() {
-    console.log('🔐 Tentative de connexion:', this.email);
-
     this.loading = true;
     this.errorMessage = '';
 
     try {
-      // D'abord, essayer de se connecter comme vendeur
+      // Essayer connexion vendeur
       try {
         const vendeur = await this.vendeurAuthService.login(this.email, this.password);
         if (vendeur) {
-          console.log('✅ Connexion vendeur réussie:', vendeur);
           this.router.navigate(['/vendeur']);
           return;
         }
       } catch (vendeurError: any) {
-        console.log('Pas un compte vendeur, tentative client...');
-      }
-
-      // Sinon, connexion normale (client ou admin)
-      const user = await this.authService.login(this.email, this.password);
-      console.log('✅ Connexion réussie:', user);
-
-      if (user) {
-        if (user.role === 'admin') {
-          console.log('👑 Redirection vers /admin');
-          this.router.navigate(['/admin']);
-        } else if (user.role === 'vendeur') {
-          console.log(' 🛍️ Redirection vers /vendeur');
-          this.router.navigate(['/vendeur']);
-        } else {
-          console.log('👤 Redirection vers /');
-          this.router.navigate(['/']);
+        if (vendeurError.message !== 'Accès réservé aux vendeurs') {
+          throw vendeurError;
         }
       }
+
+      // Connexion client ou admin
+      const user = await this.authService.login(this.email, this.password);
+      if (user) {
+        if (user.role === 'admin') {
+          this.router.navigate(['/admin']);
+        } else {
+          this.router.navigate(['/']);
+        }
+      } else {
+        this.errorMessage = 'Email ou mot de passe incorrect';
+      }
     } catch (error: any) {
-      console.error('❌ Erreur:', error);
-      this.errorMessage = error.message || 'Email ou mot de passe incorrect';
+      this.errorMessage = error.message || 'Erreur de connexion';
     } finally {
       this.loading = false;
     }

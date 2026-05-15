@@ -1,100 +1,22 @@
-/* ====================== PALETTE PROFESSIONNELLE Monecome ====================== */
-:root {
-  --primary: #0F766E;
-  --primary-dark: #0A5C57;
-  --primary-light: #14B8A6;
-  --accent: #10B981;
-  --secondary: #1E40AF;
-  --dark: #1E2937;
-  --light: #F8FAFC;
-  --gray: #64748B;
-  --border: #E2E8F0;
-  --success: #10B981;
-  --warning: #F59E0B;
-  --danger: #EF4444;
+@import 'bootstrap/dist/css/bootstrap.min.css';
+@import 'bootstrap-icons/font/bootstrap-icons.css';
+@import './styles/theme-marketplace-professionnel.css';
+
+/* Reset global */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-/* ====================== GLOBAL ====================== */
 body {
-  background: var(--light);
-  color: var(--dark);
-  font-family: 'Segoe UI', system-ui, sans-serif;
+  font-family: 'Inter', -apple-system, 'Segoe UI', Roboto, sans-serif;
+  background: #F9FAFB;
+  color: #111827;
 }
 
-.navbar {
-  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%) !important;
-}
-
-/* Boutons */
-.btn-primary {
-  background: var(--primary);
-  border: none;
-}
-.btn-primary:hover {
-  background: var(--primary-dark);
-  transform: translateY(-1px);
-}
-
-.btn-success {
-  background: var(--accent);
-}
-.btn-success:hover {
-  background: #0F9A6E;
-}
-
-/* Cards & Hover */
-.card {
-  border-radius: 16px;
-  border: 1px solid var(--border);
-  box-shadow: 0 4px 15px rgba(0,0,0,0.06);
-  transition: all 0.3s ease;
-}
-.card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 15px 35px rgba(15, 118, 110, 0.12);
-}
-
-/* Badges */
-.badge-hot { background: #EF4444; color: white; }
-.badge-new { background: var(--accent); color: white; }
-.badge-sale { background: var(--warning); color: white; }
-
-/* Sidebar Admin / Vendeur */
-.admin-sidebar, .vendeur-sidebar {
-  background: var(--dark);
-}
-
-/* Liens & Accents */
-.text-primary, .link-primary {
-  color: var(--primary);
-}
-.text-primary:hover {
-  color: var(--primary-dark);
-}
-
-/* Hero */
-.hero-premium, .hero-section {
-  background: linear-gradient(135deg, #0F172A 0%, var(--primary-dark) 100%);
-}
-
-/* Stat cards */
-.stat-card {
-  border-radius: 16px;
-  overflow: hidden;
-}
-
-/* Améliorations visuelles */
-.product-premium:hover,
-.product-card:hover {
-  border-color: var(--primary);
-  box-shadow: 0 20px 40px rgba(15, 118, 110, 0.15);
-}
-
-.btn-outline-primary {
-  border-color: var(--primary);
-  color: var(--primary);
-}
-.btn-outline-primary:hover {
-  background: var(--primary);
-  color: white;
-}
+/* Utilitaires */
+.cursor-pointer { cursor: pointer; }
+.transition { transition: all 0.2s ease; }
+.rounded-custom { border-radius: 0.75rem; }
+.shadow-custom { box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }

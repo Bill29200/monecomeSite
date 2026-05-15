@@ -1,48 +1,40 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-admin-layout',
   templateUrl: './admin-layout.component.html',
-  styleUrls: ['./admin-layout.component.css']
+  styles: []
 })
-export class AdminLayoutComponent implements OnInit {
-  adminName: string = '';
-  adminEmail: string = '';
+export class AdminLayoutComponent {
+  sidebarOpen: boolean = false;
 
   constructor(
     private authService: AuthService,
     private router: Router
   ) {}
 
-  ngOnInit() {
-    this.loadAdminInfo();
-  }
-
-  loadAdminInfo() {
+  getUserName(): string {
     const user = this.authService.getCurrentUser();
-    console.log('Admin user:', user);
-    if (user) {
-      this.adminName = user.nom || user.displayName || 'Admin';
-      this.adminEmail = user.email || '';
-    } else {
-      // Valeurs par défaut pour le test
-      this.adminName = 'Administrateur';
-      this.adminEmail = 'admin@monecome.com';
+    return user?.nom || user?.displayName || 'Admin';
+  }
+
+  getUserInitial(): string {
+    return this.getUserName().charAt(0).toUpperCase();
+  }
+
+  getUserEmail(): string {
+    const user = this.authService.getCurrentUser();
+    return user?.email || 'admin@monecome.com';
+  }
+
+  toggleSidebar() {
+    this.sidebarOpen = !this.sidebarOpen;
+    const sidebar = document.querySelector('.admin-sidebar');
+    if (sidebar) {
+      sidebar.classList.toggle('open', this.sidebarOpen);
     }
-  }
-
-  getAdminName(): string {
-    return this.adminName;
-  }
-
-  getAdminEmail(): string {
-    return this.adminEmail;
-  }
-
-  getAdminInitial(): string {
-    return this.adminName.charAt(0).toUpperCase();
   }
 
   async logout() {

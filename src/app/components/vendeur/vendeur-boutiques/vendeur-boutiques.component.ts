@@ -5,7 +5,6 @@ import { Boutique } from '../../../models/boutique.model';
 @Component({
   selector: 'app-vendeur-boutiques',
   templateUrl: './vendeur-boutiques.component.html',
-  styleUrls: ['./vendeur-boutiques.component.css']
 })
 export class VendeurBoutiquesComponent implements OnInit {
   boutiques: Boutique[] = [];

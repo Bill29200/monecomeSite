@@ -4,7 +4,6 @@ import { BoutiqueService } from '../../../services/boutique.service';
 @Component({
   selector: 'app-abonnements-admin',
   templateUrl: './abonnements-admin.component.html',
-  styleUrl: './abonnements-admin.component.css'
 })
 export class AbonnementsAdminComponent implements OnInit {
   boutiques: any[] = [];

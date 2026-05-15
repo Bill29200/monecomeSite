@@ -7,7 +7,6 @@ import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
 @Component({
   selector: 'app-vendeurs-admin',
   templateUrl: './vendeurs-admin.component.html',
-  styleUrls: ['./vendeurs-admin.component.css']
 })
 export class VendeursAdminComponent implements OnInit {
   vendeurs: any[] = [];

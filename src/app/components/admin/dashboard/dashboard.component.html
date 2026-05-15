@@ -1,34 +1,107 @@
 <div class="dashboard-container">
-  <h2 class="mb-4">Tableau de bord</h2>
-  
-  <div class="row g-4">
-    <div class="col-md-3">
-      <div class="stat-card bg-primary">
-        <div class="stat-icon"><i class="bi bi-shop"></i></div>
-        <h3>{{ stats.boutiquesActives }}</h3>
-        <p>Boutiques actives</p>
+  <!-- Stats Cards -->
+  <div class="stats-grid">
+    <div class="stat-card-premium" (click)="navigateTo('/admin/boutiques')">
+      <div class="stat-header">
+        <div class="stat-icon">
+          <i class="bi bi-shop"></i>
+        </div>
+      </div>
+      <div class="stat-value">{{ stats.boutiquesActives }}</div>
+      <div class="stat-label">Boutiques actives</div>
+      <div class="stat-trend up">
+        <i class="bi bi-arrow-up"></i> +12% ce mois
       </div>
     </div>
-    <div class="col-md-3">
-      <div class="stat-card bg-success">
-        <div class="stat-icon"><i class="bi bi-box-seam"></i></div>
-        <h3>{{ stats.produits }}</h3>
-        <p>Produits</p>
+
+    <div class="stat-card-premium" (click)="navigateTo('/admin/produits')">
+      <div class="stat-header">
+        <div class="stat-icon">
+          <i class="bi bi-box-seam"></i>
+        </div>
+      </div>
+      <div class="stat-value">{{ stats.produits }}</div>
+      <div class="stat-label">Produits</div>
+      <div class="stat-trend up">
+        <i class="bi bi-arrow-up"></i> +8% ce mois
       </div>
     </div>
-    <div class="col-md-3">
-      <div class="stat-card bg-info">
-        <div class="stat-icon"><i class="bi bi-people"></i></div>
-        <h3>{{ stats.vendeurs }}</h3>
-        <p>Vendeurs</p>
+
+    <div class="stat-card-premium" (click)="navigateTo('/admin/vendeurs')">
+      <div class="stat-header">
+        <div class="stat-icon">
+          <i class="bi bi-people"></i>
+        </div>
+      </div>
+      <div class="stat-value">{{ stats.vendeurs }}</div>
+      <div class="stat-label">Vendeurs</div>
+      <div class="stat-trend up">
+        <i class="bi bi-arrow-up"></i> +5% ce mois
       </div>
     </div>
-    <div class="col-md-3">
-      <div class="stat-card bg-warning">
-        <div class="stat-icon"><i class="bi bi-person"></i></div>
-        <h3>{{ stats.clients }}</h3>
-        <p>Clients</p>
+
+    <div class="stat-card-premium" (click)="navigateTo('/admin/clients')">
+      <div class="stat-header">
+        <div class="stat-icon">
+          <i class="bi bi-person"></i>
+        </div>
       </div>
+      <div class="stat-value">{{ stats.clients }}</div>
+      <div class="stat-label">Clients</div>
+      <div class="stat-trend up">
+        <i class="bi bi-arrow-up"></i> +15% ce mois
+      </div>
+    </div>
+  </div>
+
+  <!-- Actions Rapides -->
+  <div class="section-title">
+    <i class="bi bi-lightning-charge-fill"></i>
+    Actions rapides
+  </div>
+  <div class="actions-grid">
+    <div class="action-card" (click)="navigateTo('/admin/boutiques')">
+      <div class="action-icon">
+        <i class="bi bi-shop"></i>
+      </div>
+      <div class="action-title">Boutiques</div>
+      <div class="action-description">Gérer les boutiques et voir l'aperçu client</div>
+      <button class="btn-access">
+        Accéder <i class="bi bi-arrow-right"></i>
+      </button>
+    </div>
+
+    <div class="action-card" (click)="navigateTo('/admin/vendeurs')">
+      <div class="action-icon">
+        <i class="bi bi-person-badge"></i>
+      </div>
+      <div class="action-title">Vendeurs</div>
+      <div class="action-description">Créer et gérer les vendeurs</div>
+      <button class="btn-access">
+        Accéder <i class="bi bi-arrow-right"></i>
+      </button>
+    </div>
+
+    <div class="action-card" (click)="navigateTo('/admin/abonnements')">
+      <div class="action-icon">
+        <i class="bi bi-credit-card"></i>
+      </div>
+      <div class="action-title">Abonnements</div>
+      <div class="action-description">Configurer les packs d'abonnement</div>
+      <button class="btn-access">
+        Accéder <i class="bi bi-arrow-right"></i>
+      </button>
+    </div>
+
+    <div class="action-card" (click)="navigateTo('/admin/commandes')">
+      <div class="action-icon">
+        <i class="bi bi-cart-check"></i>
+      </div>
+      <div class="action-title">Commandes</div>
+      <div class="action-description">Gérer les commandes clients</div>
+      <button class="btn-access">
+        Accéder <i class="bi bi-arrow-right"></i>
+      </button>
     </div>
   </div>
 </div>
