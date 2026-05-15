@@ -1,0 +1,224 @@
+/* ============================================
+   THEME MARKETPLACE PREMIUM - Bleu Nuit & Or
+   ============================================ */
+
+:root {
+  --primary: #0A2647;
+  --primary-dark: #051a33;
+  --primary-light: #1a3a5c;
+  --accent: #D4AF37;
+  --accent-dark: #b8960c;
+  --success: #2E7D32;
+  --danger: #C62828;
+  --text-dark: #1A1A1A;
+  --bg-light: #F8F9FA;
+  --bg-white: #FFFFFF;
+  --border: #E0E0E0;
+}
+
+/* NAVBAR */
+.navbar {
+  background: #0A2647 !important;
+  border-bottom: 2px solid #D4AF37 !important;
+}
+
+.navbar .navbar-brand {
+  color: white !important;
+  font-weight: 700;
+}
+
+.navbar .nav-link {
+  color: rgba(255,255,255,0.85) !important;
+}
+
+.navbar .nav-link:hover {
+  color: #D4AF37 !important;
+}
+
+.btn-outline-light {
+  border: 1.5px solid rgba(255,255,255,0.3);
+  color: white;
+  border-radius: 50px;
+  padding: 0.4rem 1.2rem;
+  text-decoration: none;
+}
+
+.btn-outline-light:hover {
+  background: #D4AF37;
+  border-color: #D4AF37;
+  color: #0A2647;
+}
+
+/* BOUTONS PRINCIPAUX */
+.btn-primary {
+  background: #0A2647 !important;
+  border: none !important;
+  border-radius: 50px !important;
+  padding: 0.5rem 1.5rem !important;
+  font-weight: 600;
+}
+
+.btn-primary:hover {
+  background: #051a33 !important;
+  transform: translateY(-2px);
+}
+
+.btn-accent {
+  background: #D4AF37;
+  color: #0A2647;
+  border: none;
+  border-radius: 50px;
+  padding: 0.5rem 1.5rem;
+  font-weight: 600;
+}
+
+.btn-accent:hover {
+  background: #b8960c;
+  color: #0A2647;
+}
+
+/* CARTES STATS */
+.stat-card {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  border-left: 4px solid #D4AF37;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  transition: all 0.2s;
+}
+
+.stat-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+}
+
+.stat-card .stat-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #0A2647;
+}
+
+.stat-card .stat-label {
+  color: #666;
+  font-size: 0.85rem;
+}
+
+/* CARTES PRODUITS */
+.product-card {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.2s;
+  border: 1px solid #eee;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+  border-color: #D4AF37;
+}
+
+.product-card .current-price {
+  color: #0A2647;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.add-to-cart-btn {
+  background: #0A2647;
+  color: white;
+  border: none;
+  border-radius: 50px;
+  padding: 0.5rem 1rem;
+  width: 100%;
+  transition: all 0.2s;
+}
+
+.add-to-cart-btn:hover {
+  background: #D4AF37;
+  color: #0A2647;
+}
+
+/* CATEGORIES */
+.category-chip {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 50px;
+  padding: 0.4rem 1.2rem;
+  transition: all 0.2s;
+}
+
+.category-chip:hover, .category-chip.active {
+  background: #0A2647;
+  color: white;
+  border-color: #0A2647;
+}
+
+/* HERO SECTION */
+.hero-section {
+  background: linear-gradient(135deg, #0A2647 0%, #1a3a5c 100%);
+  color: white;
+}
+
+.hero-section .hero-title .highlight {
+  color: #D4AF37;
+}
+
+/* FOOTER */
+.footer {
+  background: #0A2647;
+  color: rgba(255,255,255,0.7);
+  border-top: 2px solid #D4AF37;
+}
+
+.footer a {
+  color: rgba(255,255,255,0.7);
+  text-decoration: none;
+}
+
+.footer a:hover {
+  color: #D4AF37;
+}
+
+/* FORMULAIRES */
+.form-control:focus, .form-select:focus {
+  border-color: #D4AF37;
+  box-shadow: 0 0 0 3px rgba(212,175,55,0.15);
+}
+
+/* ADMIN SIDEBAR */
+.admin-sidebar, .vendeur-sidebar {
+  background: #0A2647 !important;
+}
+
+.menu-item.active, .nav-item.active {
+  background: #D4AF37 !important;
+  color: #0A2647 !important;
+}
+
+/* MODAL */
+.modal-header {
+  background: #0A2647;
+  color: white;
+  border-bottom: 2px solid #D4AF37;
+}
+
+/* ALERTES */
+.alert-success {
+  background: #E8F5E9;
+  border-color: #2E7D32;
+  color: #1B5E20;
+}
+
+/* PAGINATION */
+.pagination .page-item.active .page-link {
+  background: #0A2647;
+  border-color: #0A2647;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .stat-card .stat-value {
+    font-size: 1.5rem;
+  }
+}

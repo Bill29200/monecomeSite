@@ -1,262 +1,100 @@
-/* Import Bootstrap */
-@import 'bootstrap/dist/css/bootstrap.min.css';
-
-/* ============================================
-   THEME GRIS CLAIR MODERNE
-   ============================================ */
-
+/* ====================== PALETTE PROFESSIONNELLE Monecome ====================== */
 :root {
-  /* Couleur d'accent - Orange */
-  --primary: #ea580c;
-  --primary-dark: #c2410c;
-  --primary-light: #f97316;
-  --primary-gradient: linear-gradient(135deg, #ea580c 0%, #f97316 100%);
-  --primary-gradient-dark: linear-gradient(135deg, #c2410c 0%, #ea580c 100%);
-  --primary-bg: rgba(234, 88, 12, 0.1);
-  
-  /* Gris clair */
-  --bg-main: #f5f5f5;
-  --bg-sidebar: #2d2d2d;
-  --bg-card: #ffffff;
-  --text-dark: #333333;
-  --text-gray: #666666;
-  --text-light: #999999;
-  --border: #e0e0e0;
-  --border-light: #eeeeee;
-  --shadow: 0 1px 3px rgba(0,0,0,0.08);
-  --shadow-hover: 0 8px 25px rgba(0,0,0,0.1);
+  --primary: #0F766E;
+  --primary-dark: #0A5C57;
+  --primary-light: #14B8A6;
+  --accent: #10B981;
+  --secondary: #1E40AF;
+  --dark: #1E2937;
+  --light: #F8FAFC;
+  --gray: #64748B;
+  --border: #E2E8F0;
+  --success: #10B981;
+  --warning: #F59E0B;
+  --danger: #EF4444;
 }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
+/* ====================== GLOBAL ====================== */
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: var(--bg-main);
-  color: var(--text-dark);
+  background: var(--light);
+  color: var(--dark);
+  font-family: 'Segoe UI', system-ui, sans-serif;
 }
 
-/* ============================================
-   BOUTONS
-   ============================================ */
+.navbar {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%) !important;
+}
+
+/* Boutons */
 .btn-primary {
-  background: var(--primary-gradient);
+  background: var(--primary);
   border: none;
-  padding: 0.5rem 1.2rem;
-  font-weight: 500;
-  transition: all 0.2s;
-  color: white;
+}
+.btn-primary:hover {
+  background: var(--primary-dark);
+  transform: translateY(-1px);
 }
 
-.btn-primary:hover {
-  background: var(--primary-gradient-dark);
-  transform: translateY(-1px);
-  box-shadow: 0 2px 8px rgba(234,88,12,0.3);
+.btn-success {
+  background: var(--accent);
+}
+.btn-success:hover {
+  background: #0F9A6E;
+}
+
+/* Cards & Hover */
+.card {
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+  transition: all 0.3s ease;
+}
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 15px 35px rgba(15, 118, 110, 0.12);
+}
+
+/* Badges */
+.badge-hot { background: #EF4444; color: white; }
+.badge-new { background: var(--accent); color: white; }
+.badge-sale { background: var(--warning); color: white; }
+
+/* Sidebar Admin / Vendeur */
+.admin-sidebar, .vendeur-sidebar {
+  background: var(--dark);
+}
+
+/* Liens & Accents */
+.text-primary, .link-primary {
+  color: var(--primary);
+}
+.text-primary:hover {
+  color: var(--primary-dark);
+}
+
+/* Hero */
+.hero-premium, .hero-section {
+  background: linear-gradient(135deg, #0F172A 0%, var(--primary-dark) 100%);
+}
+
+/* Stat cards */
+.stat-card {
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+/* Améliorations visuelles */
+.product-premium:hover,
+.product-card:hover {
+  border-color: var(--primary);
+  box-shadow: 0 20px 40px rgba(15, 118, 110, 0.15);
 }
 
 .btn-outline-primary {
   border-color: var(--primary);
   color: var(--primary);
-  background: transparent;
 }
-
 .btn-outline-primary:hover {
   background: var(--primary);
-  border-color: var(--primary);
   color: white;
-}
-
-.btn-secondary {
-  background: #6c757d;
-  border: none;
-}
-
-.btn-secondary:hover {
-  background: #5a6268;
-}
-
-/* ============================================
-   NAVBAR
-   ============================================ */
-.navbar {
-  background: var(--bg-sidebar) !important;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-}
-
-.navbar .btn-outline-light {
-  border-color: rgba(255,255,255,0.2);
-  color: white;
-}
-
-.navbar .btn-outline-light:hover {
-  background: rgba(255,255,255,0.1);
-  border-color: rgba(255,255,255,0.3);
-}
-
-.navbar .btn-primary {
-  background: rgba(255,255,255,0.15);
-  border: 1px solid rgba(255,255,255,0.2);
-}
-
-.navbar .btn-primary:hover {
-  background: rgba(255,255,255,0.25);
-}
-
-/* ============================================
-   CARDS
-   ============================================ */
-.card {
-  border-radius: 12px;
-  border: 1px solid var(--border);
-  background: var(--bg-card);
-  box-shadow: var(--shadow);
-  transition: all 0.2s;
-}
-
-.card:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-hover);
-}
-
-/* ============================================
-   BADGES
-   ============================================ */
-.badge-primary {
-  background: var(--primary);
-}
-
-.badge-success {
-  background: #10b981;
-}
-
-.badge-warning {
-  background: #f59e0b;
-}
-
-.badge-info {
-  background: #3b82f6;
-}
-
-/* ============================================
-   ALERTES
-   ============================================ */
-.alert-success {
-  background: #ecfdf5;
-  border-color: #a7f3d0;
-  color: #047857;
-}
-
-.alert-warning {
-  background: #fffbeb;
-  border-color: #fde68a;
-  color: #b45309;
-}
-
-.alert-danger {
-  background: #fef2f2;
-  border-color: #fecaca;
-  color: #dc2626;
-}
-
-/* ============================================
-   LIENS
-   ============================================ */
-a:not(.btn):not(.nav-link):not(.dropdown-item) {
-  color: var(--primary);
-  text-decoration: none;
-  transition: color 0.2s;
-}
-
-a:not(.btn):not(.nav-link):not(.dropdown-item):hover {
-  color: var(--primary-dark);
-  text-decoration: underline;
-}
-
-.text-primary {
-  color: var(--primary) !important;
-}
-
-/* ============================================
-   FORMULAIRES
-   ============================================ */
-.form-control,
-.form-select {
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 0.5rem 0.75rem;
-  transition: all 0.2s;
-}
-
-.form-control:focus,
-.form-select:focus {
-  border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(234,88,12,0.15);
-  outline: none;
-}
-
-/* ============================================
-   TABLES
-   ============================================ */
-.table {
-  background: var(--bg-card);
-  border-radius: 12px;
-  overflow: hidden;
-}
-
-.table thead th {
-  background: #f8f9fa;
-  border-bottom: 2px solid var(--border);
-  color: var(--text-dark);
-  font-weight: 600;
-}
-
-/* ============================================
-   SCROLLBAR
-   ============================================ */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: #e0e0e0;
-  border-radius: 10px;
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--primary);
-  border-radius: 10px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--primary-dark);
-}
-
-/* ============================================
-   UTILITAIRES
-   ============================================ */
-.bg-gradient-primary {
-  background: var(--primary-gradient) !important;
-}
-
-.btn-gradient {
-  background: var(--primary-gradient);
-  color: white;
-  border: none;
-}
-
-.btn-gradient:hover {
-  background: var(--primary-gradient-dark);
-  transform: translateY(-1px);
-}
-
-.bg-light-gray {
-  background: #f8f9fa;
-}
-
-.text-muted {
-  color: var(--text-light) !important;
 }
