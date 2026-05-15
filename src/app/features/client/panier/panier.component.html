@@ -1,0 +1,46 @@
+<div class="container py-4">
+  <h1 class="mb-4">Mon Panier</h1>
+
+  <div *ngIf="cartItems.length === 0" class="text-center py-5">
+    <h3>🛒 Panier vide</h3>
+    <a routerLink="/" class="btn btn-primary mt-3">Découvrir les produits</a>
+  </div>
+
+  <div *ngIf="cartItems.length > 0" class="row">
+    <div class="col-lg-8">
+      <div class="list-group">
+        <div class="list-group-item" *ngFor="let item of cartItems">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <h5 class="mb-1">{{ item.nom }}</h5>
+              <small class="text-muted">{{ item.prix }}€ / unité</small>
+            </div>
+            <div class="d-flex align-items-center gap-3">
+              <div class="btn-group">
+                <button class="btn btn-sm btn-outline-secondary" (click)="updateQuantity(item, -1)">-</button>
+                <span class="px-3">{{ item.quantite }}</span>
+                <button class="btn btn-sm btn-outline-secondary" (click)="updateQuantity(item, 1)">+</button>
+              </div>
+              <span class="h5 mb-0">{{ item.prix * item.quantite }}€</span>
+              <button class="btn btn-sm btn-danger" (click)="removeItem(item.id)">🗑️</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-4">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title">Résumé</h5>
+          <hr>
+          <div class="d-flex justify-content-between mb-3">
+            <span>Total TTC</span>
+            <span class="h5 mb-0">{{ total }}€</span>
+          </div>
+          <button class="btn btn-primary w-100 mb-2">✅ Passer commande</button>
+          <button class="btn btn-outline-danger w-100" (click)="clearCart()">🗑️ Vider le panier</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,36 +1,33 @@
-import { NgModule } from '@angular/core';
+import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { CommonModule } from '@angular/common';
-
 import { AppComponent } from './app.component';
 import { routes } from './app.routes';
+import { FirebaseService } from './services/firebase.service';
 
-// Client Components
+// Composants
 import { AccueilComponent } from './components/client/accueil/accueil.component';
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 import { ProduitsComponent } from './components/client/produits/produits.component';
 import { PanierComponent } from './components/client/panier/panier.component';
-
-// Admin Components
-import { AdminLayoutComponent } from './components/admin/admin-layout/admin-layout.component';
 import { DashboardComponent } from './components/admin/dashboard/dashboard.component';
 import { BoutiquesAdminComponent } from './components/admin/boutiques-admin/boutiques-admin.component';
 import { VendeursAdminComponent } from './components/admin/vendeurs-admin/vendeurs-admin.component';
 import { AbonnementsAdminComponent } from './components/admin/abonnements-admin/abonnements-admin.component';
-
-// Vendeur Components
+import { AdminLayoutComponent } from './components/admin/admin-layout/admin-layout.component';
 import { VendeurLayoutComponent } from './components/vendeur/vendeur-layout/vendeur-layout.component';
 import { VendeurDashboardComponent } from './components/vendeur/vendeur-dashboard/vendeur-dashboard.component';
 import { VendeurBoutiquesComponent } from './components/vendeur/vendeur-boutiques/vendeur-boutiques.component';
 import { VendeurProduitsComponent } from './components/vendeur/vendeur-produits/vendeur-produits.component';
 import { VendeurClientsComponent } from './components/vendeur/vendeur-clients/vendeur-clients.component';
 import { VendeurCommandesComponent } from './components/vendeur/vendeur-commandes/vendeur-commandes.component';
-
-// Footer
 import { FooterComponent } from './components/footer/footer.component';
+
+export function initializeApp(firebaseService: FirebaseService) {
+  return (): Promise<void> => firebaseService.init();
+}
 
 @NgModule({
   declarations: [
@@ -40,11 +37,11 @@ import { FooterComponent } from './components/footer/footer.component';
     RegisterComponent,
     ProduitsComponent,
     PanierComponent,
-    AdminLayoutComponent,
     DashboardComponent,
     BoutiquesAdminComponent,
     VendeursAdminComponent,
     AbonnementsAdminComponent,
+    AdminLayoutComponent,
     VendeurLayoutComponent,
     VendeurDashboardComponent,
     VendeurBoutiquesComponent,
@@ -55,11 +52,13 @@ import { FooterComponent } from './components/footer/footer.component';
   ],
   imports: [
     BrowserModule,
-    CommonModule,
     FormsModule,
-    RouterModule.forRoot(routes)
+    RouterModule.forRoot(routes, { initialNavigation: 'enabledBlocking' })
   ],
-  providers: [],
+  providers: [
+    FirebaseService,
+    { provide: APP_INITIALIZER, useFactory: initializeApp, deps: [FirebaseService], multi: true }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

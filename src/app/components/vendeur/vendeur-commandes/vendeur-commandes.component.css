@@ -1,53 +1,28 @@
-.vendeur-content {
-  padding: 20px;
-}
-
-.stats-mini {
-  display: flex;
-  gap: 10px;
-}
+.vendeur-content { padding: 20px; }
+.stats-mini { display: flex; gap: 10px; }
 
 .commande-card {
   background: white;
-  border-radius: 12px;
+  border-radius: 14px;
   margin-bottom: 20px;
   overflow: hidden;
   box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  border-left: 4px solid #ff6b35;
+  transition: box-shadow 0.2s;
 }
+.commande-card:hover { box-shadow: 0 8px 24px rgba(255,107,53,0.12); }
 
-.commande-header {
-  background: #f8fafc;
-  padding: 15px 20px;
-  border-bottom: 1px solid #e2e8f0;
-}
+.commande-header { background: #f8fafc; padding: 15px 20px; border-bottom: 1px solid #e2e8f0; }
+.commande-body   { padding: 20px; }
+.commande-footer { padding: 15px 20px; background: #f8fafc; border-top: 1px solid #e2e8f0; }
 
-.commande-body {
-  padding: 20px;
-}
+.produits-list { margin-top: 15px; }
+.table { margin-bottom: 0; }
+.empty-state { text-align: center; padding: 60px; background: white; border-radius: 16px; }
 
-.commande-footer {
-  padding: 15px 20px;
-  background: #f8fafc;
-  border-top: 1px solid #e2e8f0;
-}
+.btn-group { display: flex; gap: 10px; flex-wrap: wrap; }
 
-.produits-list {
-  margin-top: 15px;
-}
-
-.table {
-  margin-bottom: 0;
-}
-
-.empty-state {
-  text-align: center;
-  padding: 60px;
-  background: white;
-  border-radius: 16px;
-}
-
-.btn-group {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-}
+/* Boutons statut */
+.btn-success { background: #10b981 !important; border-color: #10b981 !important; }
+.btn-primary { background: #ff6b35 !important; border-color: #ff6b35 !important; }
+.btn-info    { background: #3b82f6 !important; border-color: #3b82f6 !important; }

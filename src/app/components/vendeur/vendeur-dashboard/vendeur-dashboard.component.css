@@ -1,20 +1,7 @@
-.dashboard {
-  max-width: 1400px;
-  margin: 0 auto;
-}
+.dashboard { max-width: 1400px; margin: 0 auto; }
+.dashboard-header { margin-bottom: 32px; }
+.dashboard-header h1 { font-size: 28px; font-weight: 700; color: #1a1a2e; margin-bottom: 8px; }
 
-.dashboard-header {
-  margin-bottom: 32px;
-}
-
-.dashboard-header h1 {
-  font-size: 28px;
-  font-weight: 600;
-  color: #1a1a2e;
-  margin-bottom: 8px;
-}
-
-/* Stats Grid */
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -26,68 +13,40 @@
   background: white;
   border-radius: 16px;
   padding: 20px;
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  display: flex; align-items: center; gap: 16px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
   border: 1px solid #e9ecef;
   transition: all 0.2s;
 }
-
-.stat-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
-}
+.stat-card:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(255,107,53,0.1); }
 
 .stat-icon {
-  width: 56px;
-  height: 56px;
+  width: 56px; height: 56px;
   border-radius: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: flex; align-items: center; justify-content: center;
 }
+.stat-icon i { font-size: 26px; color: white; }
 
-.stat-icon i {
-  font-size: 26px;
-  color: white;
-}
+/* ← Icônes orange pour le dashboard vendeur */
+.stat-icon.purple { background: linear-gradient(135deg, #ff6b35, #e8541f); }
+.stat-icon.teal   { background: linear-gradient(135deg, #10b981, #059669); }
+.stat-icon.orange { background: linear-gradient(135deg, #f59e0b, #d97706); }
+.stat-icon.green  { background: linear-gradient(135deg, #3b82f6, #2563eb); }
 
-.stat-icon.purple { background: linear-gradient(135deg, #667eea, #764ba2); }
-.stat-icon.teal { background: linear-gradient(135deg, #11998e, #38ef7d); }
-.stat-icon.orange { background: linear-gradient(135deg, #f093fb, #f5576c); }
-.stat-icon.green { background: linear-gradient(135deg, #4facfe, #00f2fe); }
-
-.stat-info {
-  flex: 1;
-}
-
-.stat-value {
-  font-size: 28px;
-  font-weight: 700;
-  color: #1a1a2e;
-  display: block;
-  line-height: 1.2;
-}
-
-.stat-label {
-  font-size: 13px;
-  color: #6c757d;
-  display: block;
-  margin-top: 4px;
-}
-
+.stat-info { flex: 1; }
+.stat-value { font-size: 28px; font-weight: 700; color: #1a1a2e; display: block; line-height: 1.2; }
+.stat-label { font-size: 13px; color: #6c757d; display: block; margin-top: 4px; }
 .stat-badge {
   display: inline-block;
-  background: #fff3cd;
-  color: #856404;
+  background: #fff3ee;
+  color: #e8541f;
   font-size: 11px;
   padding: 2px 8px;
   border-radius: 20px;
   margin-top: 6px;
+  font-weight: 600;
 }
 
-/* Small Stats Grid */
 .stats-grid-small {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -99,128 +58,67 @@
   background: white;
   border-radius: 12px;
   padding: 16px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
+  display: flex; align-items: center; gap: 12px;
   border: 1px solid #e9ecef;
 }
 
 .stat-icon-small {
-  width: 44px;
-  height: 44px;
+  width: 44px; height: 44px;
   border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: flex; align-items: center; justify-content: center;
 }
+.stat-icon-small i { font-size: 20px; color: white; }
 
-.stat-icon-small i {
-  font-size: 20px;
-  color: white;
-}
-
-.stat-icon-small.blue { background: #3b82f6; }
-.stat-icon-small.green { background: #10b981; }
-.stat-icon-small.cyan { background: #06b6d4; }
+/* ← Small icons orange */
+.stat-icon-small.blue   { background: #ff6b35; }
+.stat-icon-small.green  { background: #10b981; }
+.stat-icon-small.cyan   { background: #3b82f6; }
 .stat-icon-small.orange { background: #f59e0b; }
 
-.stat-value-small {
-  font-size: 20px;
-  font-weight: 700;
-  color: #1a1a2e;
-  display: block;
-}
+.stat-value-small { font-size: 20px; font-weight: 700; color: #1a1a2e; display: block; }
+.stat-label-small { font-size: 12px; color: #6c757d; }
 
-.stat-label-small {
-  font-size: 12px;
-  color: #6c757d;
-}
+.shop-section, .actions-section { margin-bottom: 32px; }
+.section-header { margin-bottom: 20px; }
+.section-header h2 { font-size: 18px; font-weight: 600; color: #1a1a2e; }
 
-/* Sections */
-.shop-section, .actions-section {
-  margin-bottom: 32px;
-}
-
-.section-header {
-  margin-bottom: 20px;
-}
-
-.section-header h2 {
-  font-size: 18px;
-  font-weight: 600;
-  color: #1a1a2e;
-}
-
-/* Actions Grid */
-.actions-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
-}
+.actions-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
 
 .action-card {
   background: white;
   border-radius: 16px;
   padding: 20px;
-  display: flex;
-  gap: 16px;
+  display: flex; gap: 16px;
   cursor: pointer;
   transition: all 0.2s;
   border: 1px solid #e9ecef;
+  text-decoration: none;
+  color: inherit;
 }
-
 .action-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
-  border-color: #3b82f6;
+  box-shadow: 0 8px 25px rgba(255,107,53,0.12);
+  border-color: #ff6b35;
 }
 
-.action-icon i {
-  font-size: 28px;
-  color: #3b82f6;
-}
+/* Icône action orange */
+.action-icon i { font-size: 28px; color: #ff6b35; }
+.action-info h4 { font-size: 15px; font-weight: 600; color: #1a1a2e; margin-bottom: 4px; }
+.action-info p { font-size: 12px; color: #6c757d; margin: 0; }
 
-.action-info h4 {
-  font-size: 15px;
-  font-weight: 600;
-  color: #1a1a2e;
-  margin-bottom: 4px;
-}
-
-.action-info p {
-  font-size: 12px;
-  color: #6c757d;
-  margin: 0;
-}
-
-/* Alert */
 .alert {
-  background: #fff3cd;
-  border: 1px solid #ffeeba;
-  color: #856404;
+  background: #fff3ee;
+  border: 1px solid #ffddcc;
+  color: #e8541f;
   padding: 16px 20px;
   border-radius: 12px;
   margin-bottom: 24px;
 }
+.alert a { color: #e8541f; font-weight: 600; }
 
-.alert a {
-  color: #856404;
-  font-weight: 600;
-}
-
-/* Responsive */
 @media (max-width: 1200px) {
-  .stats-grid, .stats-grid-small, .actions-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
+  .stats-grid, .stats-grid-small, .actions-grid { grid-template-columns: repeat(2, 1fr); }
 }
-
 @media (max-width: 768px) {
-  .stats-grid, .stats-grid-small, .actions-grid {
-    grid-template-columns: 1fr;
-  }
-  
-  .dashboard-header h1 {
-    font-size: 24px;
-  }
+  .stats-grid, .stats-grid-small, .actions-grid { grid-template-columns: 1fr; }
 }

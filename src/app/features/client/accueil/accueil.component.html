@@ -1,0 +1,22 @@
+<div class="container py-4">
+  <h1 class="text-center mb-4">Bienvenue sur Monecome</h1>
+  
+  <div *ngIf="loading" class="text-center py-5">
+    <div class="spinner-border text-primary"></div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-4 mb-4" *ngFor="let product of produits">
+      <div class="card h-100 shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title">{{ product.nom }}</h5>
+          <p class="card-text text-muted">{{ product.description | slice:0:100 }}</p>
+          <div class="d-flex justify-content-between align-items-center">
+            <span class="h5 text-primary">{{ product.prix }}€</span>
+            <button class="btn btn-primary" (click)="addToCart(product)">🛒 Ajouter</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

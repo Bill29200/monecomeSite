@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 import { FirebaseService } from './firebase.service';
 import { User } from '../models/user.model';
 
@@ -6,47 +6,53 @@ import { User } from '../models/user.model';
 export class AuthService {
   private currentUser: User | null = null;
 
-  constructor(private firebase: FirebaseService) {
-    this.loadCurrentUser();
-  }
-
-  async loadCurrentUser() {
-    const firebaseUser = this.firebase.getCurrentUser();
-    if (firebaseUser?.uid) {
-      const users = await this.firebase.getData('users');
-      const user = users.find((u: any) => u.uid === firebaseUser.uid);
-      if (user) this.currentUser = user;
-    }
-  }
+  constructor(
+    private firebase: FirebaseService,
+    private ngZone: NgZone
+  ) {}
 
   async login(email: string, password: string): Promise<User | null> {
-    try {
-      const result = await this.firebase.login(email, password);
-      
-      const users = await this.firebase.getData('users');
-      const userData = users.find((u: any) => u.uid === result.user.uid);
+    console.log('🔐 Login attempt:', email);
+    
+    // Force l'exécution en dehors de la zone Angular
+    return this.ngZone.runOutsideAngular(async () => {
+      try {
+        const result = await this.firebase.login(email, password);
+        console.log('✅ Firebase auth success:', result.user.uid);
+        
+        const users = await this.firebase.getData('users');
+        let userData = users.find((u: any) => u.uid === result.user.uid);
 
-      if (userData) {
+        if (!userData) {
+          userData = {
+            uid: result.user.uid,
+            email: email,
+            nom: email.split('@')[0],
+            role: email === 'admin@monecome.com' ? 'admin' : 'client',
+            isActive: true,
+            createdAt: new Date().toISOString()
+          };
+          await this.firebase.addData('users', userData);
+        }
+
         this.currentUser = userData;
-        localStorage.setItem('user', JSON.stringify(userData));
+        
+        // Retourner dans la zone Angular pour mettre à jour l'UI
+        this.ngZone.run(() => {
+          localStorage.setItem('user', JSON.stringify(userData));
+        });
+        
         return userData;
-      } else {
-        this.currentUser = { uid: result.user.uid, email: result.user.email!, role: 'client', nom: '' };
-        localStorage.setItem('user', JSON.stringify(this.currentUser));
-        return this.currentUser;
+        
+      } catch (error: any) {
+        console.error('❌ Login error:', error);
+        throw error;
       }
-    } catch (error: any) {
-      console.error('Erreur login:', error);
-      throw error;
-    }
+    });
   }
 
   async logout() {
-    try {
-      await this.firebase.logout();
-    } catch (error) {
-      console.error('Erreur logout:', error);
-    }
+    await this.firebase.logout();
     this.currentUser = null;
     localStorage.removeItem('user');
   }

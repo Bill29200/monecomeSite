@@ -1,0 +1,31 @@
+<nav class="navbar navbar-expand-lg sticky-top" style="background: linear-gradient(135deg, #0f766e 0%, #14b8a6 100%);">
+  <div class="container">
+    <a class="navbar-brand fw-bold text-white" routerLink="/">🛍️ Monecome</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <div class="ms-auto d-flex gap-2">
+        <a routerLink="/" class="btn btn-outline-light btn-sm">Accueil</a>
+        <a routerLink="/panier" class="btn btn-outline-light btn-sm position-relative">
+          🛒 Panier
+          <span *ngIf="cartCount > 0" style="position:absolute; top:-8px; right:-8px; background:red; color:white; border-radius:50%; padding:2px 6px; font-size:10px;">{{cartCount}}</span>
+        </a>
+        <div *ngIf="!isAuthenticated">
+          <a routerLink="/login" class="btn btn-outline-light btn-sm">Connexion</a>
+          <a routerLink="/register" class="btn btn-light btn-sm ms-1">Inscription</a>
+        </div>
+        <div *ngIf="isAuthenticated" class="dropdown">
+          <button class="btn btn-light dropdown-toggle btn-sm" data-bs-toggle="dropdown">
+            👤 {{ getUserName() }}
+          </button>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" [routerLink]="getDashboardLink()">📊 Dashboard</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item text-danger" (click)="logout()">🚪 Déconnexion</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>

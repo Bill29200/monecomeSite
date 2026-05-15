@@ -6,7 +6,7 @@ import { VendeurAuthService } from '../../services/vendeur-auth.service';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrl: './login.component.css'
+  styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
   email: string = '';
@@ -21,11 +21,13 @@ export class LoginComponent {
   ) {}
 
   async onLogin() {
+    console.log('🔐 Tentative de connexion:', this.email);
+    
     this.loading = true;
     this.errorMessage = '';
 
     try {
-      // Essayer d'abord de se connecter en tant que vendeur
+      // D'abord, essayer de se connecter comme vendeur
       try {
         const vendeur = await this.vendeurAuthService.login(this.email, this.password);
         if (vendeur) {
@@ -34,30 +36,28 @@ export class LoginComponent {
           return;
         }
       } catch (vendeurError: any) {
-        // Si ce n'est pas un vendeur, essayer client/admin
-        if (vendeurError.message === 'Accès réservé aux vendeurs') {
-          // Continuer avec la connexion normale
-        } else {
-          throw vendeurError;
-        }
+        console.log('Pas un compte vendeur, tentative client...');
       }
 
-      // Connexion normale (client ou admin)
+      // Sinon, connexion normale (client ou admin)
       const user = await this.authService.login(this.email, this.password);
+      console.log('✅ Connexion réussie:', user);
+      
       if (user) {
-        console.log('✅ Connexion réussie:', user);
-        
         if (user.role === 'admin') {
+          console.log('👑 Redirection vers /admin');
           this.router.navigate(['/admin']);
+        } else if (user.role === 'vendeur') {
+          console.log('🏪 Redirection vers /vendeur');
+          this.router.navigate(['/vendeur']);
         } else {
+          console.log('👤 Redirection vers /');
           this.router.navigate(['/']);
         }
-      } else {
-        this.errorMessage = 'Identifiants incorrects';
       }
     } catch (error: any) {
-      console.error('Erreur login:', error);
-      this.errorMessage = error.message || 'Erreur de connexion. Vérifiez vos identifiants.';
+      console.error('❌ Erreur:', error);
+      this.errorMessage = error.message || 'Email ou mot de passe incorrect';
     } finally {
       this.loading = false;
     }

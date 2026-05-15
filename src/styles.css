@@ -1,23 +1,22 @@
-/* Variables globales - Thème Vert Professionnel */
+@import 'bootstrap/dist/css/bootstrap.min.css';
+
+/* ══ Variables Orange Moderne ══════════════════════════════════════════════ */
 :root {
-  --primary: #0f766e;
-  --primary-dark: #0d5c56;
-  --primary-light: #14b8a6;
-  --primary-gradient: linear-gradient(135deg, #0f766e 0%, #14b8a6 100%);
-  --bg-light: #f8fafc;
-  --bg-white: #ffffff;
-  --text-dark: #1e293b;
-  --text-gray: #64748b;
-  --border: #e2e8f0;
-  --shadow: 0 1px 3px rgba(0,0,0,0.05);
-  --shadow-hover: 0 8px 25px rgba(0,0,0,0.08);
+  --primary:          #ff6b35;
+  --primary-dark:     #e8541f;
+  --primary-light:    #14b8a6; /* gardé pour les accents vendeur */
+  --primary-gradient: linear-gradient(135deg, #ff6b35 0%, #ff9a5c 100%);
+  --bg-light:         #f8fafc;
+  --bg-white:         #ffffff;
+  --text-dark:        #1e293b;
+  --text-gray:        #64748b;
+  --border:           #e2e8f0;
+  --shadow:           0 1px 3px rgba(0,0,0,0.06);
+  --shadow-hover:     0 8px 25px rgba(255,107,53,0.15);
+  --orange-glow:      0 0 0 3px rgba(255,107,53,0.18);
 }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -25,78 +24,62 @@ body {
   color: var(--text-dark);
 }
 
-/* Boutons */
+/* ── Boutons Bootstrap ─────────────────────────────────────────────────── */
 .btn-primary {
-  background: var(--primary);
-  border: none;
-  padding: 0.5rem 1.2rem;
-  font-weight: 500;
-  transition: all 0.2s;
+  background: var(--primary) !important;
+  border-color: var(--primary) !important;
+  font-weight: 600;
+  transition: all 0.25s;
 }
-
-.btn-primary:hover {
-  background: var(--primary-dark);
+.btn-primary:hover, .btn-primary:focus {
+  background: var(--primary-dark) !important;
+  border-color: var(--primary-dark) !important;
   transform: translateY(-1px);
-  box-shadow: 0 2px 8px rgba(15,118,110,0.3);
+  box-shadow: 0 4px 12px rgba(255,107,53,0.35) !important;
 }
+.btn-primary:disabled { opacity: 0.65; transform: none; }
 
 .btn-outline-primary {
-  border-color: var(--primary);
-  color: var(--primary);
+  color: var(--primary) !important;
+  border-color: var(--primary) !important;
 }
-
 .btn-outline-primary:hover {
-  background: var(--primary);
-  border-color: var(--primary);
+  background: var(--primary) !important;
+  border-color: var(--primary) !important;
+  color: white !important;
 }
 
-/* Cards */
+/* ── Formulaires ─────────────────────────────────────────────────────────── */
+.form-control, .form-select {
+  border-radius: 10px;
+  border: 1.5px solid var(--border);
+  padding: 10px 14px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.form-control:focus, .form-select:focus {
+  border-color: var(--primary) !important;
+  box-shadow: var(--orange-glow) !important;
+  outline: none;
+}
+
+/* ── Cards ───────────────────────────────────────────────────────────────── */
 .card {
-  border-radius: 12px;
+  border-radius: 14px;
   border: 1px solid var(--border);
   box-shadow: var(--shadow);
-  transition: all 0.2s;
+  transition: transform 0.25s, box-shadow 0.25s;
 }
-
 .card:hover {
-  transform: translateY(-2px);
+  transform: translateY(-3px);
   box-shadow: var(--shadow-hover);
 }
 
-/* Badges */
-.badge-primary {
-  background: var(--primary);
-}
+/* ── Scrollbar ───────────────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 7px; height: 7px; }
+::-webkit-scrollbar-track { background: var(--border); border-radius: 10px; }
+::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: var(--primary-dark); }
 
-/* Alertes */
-.alert-success {
-  background: #ccfbf1;
-  border-color: #a7f3d0;
-  color: var(--primary-dark);
-}
-
-.alert-warning {
-  background: #fef3c7;
-  border-color: #fde68a;
-  color: #92400e;
-}
-
-/* Scrollbar personnalisée */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: var(--border);
-  border-radius: 10px;
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--primary);
-  border-radius: 10px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--primary-dark);
-}
+/* ── Alertes ─────────────────────────────────────────────────────────────── */
+.alert-success { background: #fff3ee; border-color: #ffddcc; color: var(--primary-dark); }
+.alert-warning { background: #fef3c7; border-color: #fde68a; color: #92400e; }

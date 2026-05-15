@@ -1,8 +1,7 @@
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 import { initializeApp } from 'firebase/app';
-import { getDatabase, ref, get, push, update, remove } from 'firebase/database';
+import { getDatabase, ref, get, child, push, update, remove } from 'firebase/database';
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from 'firebase/auth';
-import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 const firebaseConfig = {
   apiKey: "AIzaSyCmjKVEyONacH6u8mxpUOi7IlpBjOxUyS8",
@@ -18,37 +17,45 @@ const firebaseConfig = {
 export class FirebaseService {
   private db: any;
   private auth: any;
-  private storage: any;
 
-  constructor() {
+  constructor(private ngZone: NgZone) {
+    console.log('🔥 Initialisation Firebase...');
     const app = initializeApp(firebaseConfig);
     this.db = getDatabase(app);
     this.auth = getAuth(app);
-    this.storage = getStorage(app);
-    console.log('✅ Firebase Service initialisé');
+    console.log('✅ Firebase configuré');
+  }
+
+  async init() {
+    console.log('✅ Firebase déjà initialisé');
+    return Promise.resolve();
   }
 
   // ====================== AUTH ======================
-  login(email: string, password: string) {
-    return signInWithEmailAndPassword(this.auth, email, password);
+  async login(email: string, password: string) {
+    return this.ngZone.runOutsideAngular(() => 
+      signInWithEmailAndPassword(this.auth, email, password)
+    );
   }
 
-  register(email: string, password: string) {
-    return createUserWithEmailAndPassword(this.auth, email, password);
+  async register(email: string, password: string) {
+    return this.ngZone.runOutsideAngular(() => 
+      createUserWithEmailAndPassword(this.auth, email, password)
+    );
   }
 
-  logout() {
-    return signOut(this.auth);
+  async logout() {
+    return this.ngZone.runOutsideAngular(() => signOut(this.auth));
   }
 
   getCurrentUser() {
     return this.auth.currentUser;
   }
 
-  // ====================== GENERIC ======================
+  // ====================== CRUD ======================
   async getData(path: string): Promise<any[]> {
-    const dbRef = ref(this.db, path);
-    const snapshot = await get(dbRef);
+    console.log(`📦 getData: ${path}`);
+    const snapshot = await get(child(ref(this.db), path));
     if (snapshot.exists()) {
       const data = snapshot.val();
       return Object.keys(data).map(key => ({ id: key, ...data[key] }));
@@ -68,31 +75,46 @@ export class FirebaseService {
   }
 
   async updateData(path: string, id: string, data: any) {
-    const dbRef = ref(this.db, `${path}/${id}`);
-    await update(dbRef, data);
+    await update(ref(this.db, `${path}/${id}`), data);
   }
 
   async deleteData(path: string, id: string) {
     await remove(ref(this.db, `${path}/${id}`));
   }
 
-  // ====================== STORAGE ======================
   async uploadImage(file: File, path: string): Promise<string> {
-    try {
-      console.log('📤 Uploading image...', path);
-      const imageRef = storageRef(this.storage, path);
-      const snapshot = await uploadBytes(imageRef, file);
-      const downloadURL = await getDownloadURL(snapshot.ref);
-      console.log('✅ Image uploaded:', downloadURL);
-      return downloadURL;
-    } catch (error) {
-      console.error('❌ Erreur upload image:', error);
-      throw error;
-    }
+    console.log('📤 Upload image:', path);
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        resolve(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    });
   }
 
-  // ====================== SPECIFIC ======================
-  async getProducts() { return this.getData('products'); }
-  async getShops() { return this.getData('boutiques'); }
-  async getBoutiques() { return this.getData('boutiques'); }
+  // ====================== SPÉCIFIQUE ======================
+  async getProducts(): Promise<any[]> {
+    const products = await this.getData('products');
+    return products.map(p => ({
+      id: p.id,
+      nom: p.name || p.nom,
+      prix: p.price || p.prix,
+      category: p.category || p.categorie,
+      description: p.description || '',
+      imageUrl: p.imageUrl,
+      stock: p.stock || 0,
+      rating: p.rating || 0,
+      isActive: p.isActive !== false,
+      boutiqueId: p.boutiqueId || ''
+    }));
+  }
+
+  async getShops(): Promise<any[]> {
+    return this.getData('boutiques');
+  }
+
+  async getBoutiques(): Promise<any[]> {
+    return this.getData('boutiques');
+  }
 }

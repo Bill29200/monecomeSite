@@ -3,6 +3,7 @@ export const environment = {
   firebase: {
     apiKey: "AIzaSyCmjKVEyONacH6u8mxpUOi7IlpBjOxUyS8",
     authDomain: "monecom4y.firebaseapp.com",
+    databaseURL: "https://monecom4y-default-rtdb.europe-west1.firebasedatabase.app",
     projectId: "monecom4y",
     storageBucket: "monecom4y.firebasestorage.app",
     messagingSenderId: "100626833500",
