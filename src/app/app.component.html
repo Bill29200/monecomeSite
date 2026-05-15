@@ -1,83 +1,59 @@
-<nav class="navbar navbar-expand-lg bg-white border-bottom sticky-top" style="box-shadow:0 2px 12px rgba(0,0,0,.06)">
+<!-- Navbar principale -->
+<nav class="navbar navbar-expand-lg navbar-dark sticky-top">
   <div class="container">
-    <a class="navbar-brand fw-bold" routerLink="/"
-       style="font-size:22px;font-weight:800;text-decoration:none;color:var(--orange)">
-       🛍️ Monecome
+    <!-- Logo à gauche -->
+    <a class="navbar-brand fw-bold d-flex align-items-center" routerLink="/">
+      <span class="logo-icon">🛍️</span>
+      <span class="logo-text">Monecome</span>
     </a>
-    <button class="navbar-toggler border-0" type="button"
-            data-bs-toggle="collapse" data-bs-target="#nav">
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="nav">
-      <ul class="navbar-nav mx-auto gap-1">
-        <li class="nav-item">
-          <a class="nav-link px-3" routerLink="/" routerLinkActive="text-orange"
-             [routerLinkActiveOptions]="{exact:true}" style="font-weight:600">Accueil</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link px-3" routerLink="/produits" routerLinkActive="text-orange"
-             style="font-weight:600">Produits</a>
-        </li>
-      </ul>
-      <ul class="navbar-nav align-items-center gap-2">
-        <li class="nav-item">
-          <a class="nav-link position-relative px-2" routerLink="/panier">
-            <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-              <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
-              <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
-            </svg>
-            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill"
-                  style="background:var(--orange);font-size:10px">0</span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="btn btn-outline-primary px-4 py-2" routerLink="/login">Connexion</a>
-        </li>
-        <li class="nav-item">
-          <a class="btn btn-primary px-4 py-2" routerLink="/register">Inscription</a>
-        </li>
-      </ul>
+
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <!-- Espace vide pour pousser les éléments à droite -->
+      <div class="flex-grow-1"></div>
+
+      <!-- Section droite : Boutons d'action -->
+      <div class="d-flex align-items-center gap-2">
+        <!-- Bouton Rafraîchir (toujours visible) -->
+        <button class="btn btn-outline-light" (click)="refreshPage()" title="Rafraîchir">
+          <i class="bi bi-arrow-repeat"></i>
+        </button>
+
+        <!-- Espace utilisateur -->
+        <div *ngIf="!isLoggedIn(); else userMenu" class="auth-buttons">
+          <a routerLink="/login" class="btn btn-outline-light">Connexion</a>
+          <a routerLink="/register" class="btn btn-primary ms-2">Inscription</a>
+        </div>
+
+        <!-- Menu utilisateur connecté -->
+        <ng-template #userMenu>
+          <div class="dropdown">
+            <button class="btn btn-light dropdown-toggle d-flex align-items-center gap-2" 
+                    type="button" 
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false">
+              <div class="user-avatar-mini">
+                {{ getUserInitial() }}
+              </div>
+              <span>{{ getUserName() }}</span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li><a class="dropdown-item" [routerLink]="getDashboardLink()">
+                <i class="bi bi-speedometer2"></i> Tableau de bord
+              </a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item text-danger" (click)="logout()">
+                <i class="bi bi-box-arrow-right"></i> Déconnexion
+              </a></li>
+            </ul>
+          </div>
+        </ng-template>
+      </div>
     </div>
   </div>
 </nav>
 
-<main>
-  <router-outlet></router-outlet>
-</main>
-
-<footer style="background:#1a1a2e;color:rgba(255,255,255,.6);padding:56px 0 32px">
-  <div class="container">
-    <div class="row gy-4">
-      <div class="col-md-4">
-        <div style="font-size:20px;font-weight:800;color:#fff;margin-bottom:14px"> 🛍️ Monecome</div>
-        <p style="font-size:14px;line-height:1.8">La marketplace qui met vos boutiques en lumière.
-           Design moderne, expérience premium.</p>
-      </div>
-      <div class="col-md-2">
-        <div style="font-weight:700;color:#fff;margin-bottom:14px">Navigation</div>
-        <ul style="list-style:none;padding:0;font-size:14px;line-height:2.2">
-          <li><a routerLink="/"         style="color:rgba(255,255,255,.6);text-decoration:none">Accueil</a></li>
-          <li><a routerLink="/produits" style="color:rgba(255,255,255,.6);text-decoration:none">Produits</a></li>
-          <li><a routerLink="/panier"   style="color:rgba(255,255,255,.6);text-decoration:none">Panier</a></li>
-        </ul>
-      </div>
-      <div class="col-md-2">
-        <div style="font-weight:700;color:#fff;margin-bottom:14px">Compte</div>
-        <ul style="list-style:none;padding:0;font-size:14px;line-height:2.2">
-          <li><a routerLink="/login"    style="color:rgba(255,255,255,.6);text-decoration:none">Connexion</a></li>
-          <li><a routerLink="/register" style="color:rgba(255,255,255,.6);text-decoration:none">Inscription</a></li>
-        </ul>
-      </div>
-      <div class="col-md-4">
-        <div style="font-weight:700;color:#fff;margin-bottom:14px">Newsletter</div>
-        <div style="display:flex;gap:8px">
-          <input type="email" placeholder="Votre email"
-                 style="flex:1;padding:11px 16px;border-radius:50px;border:none;font-size:14px;outline:none">
-          <button class="btn-orange" style="padding:11px 20px;white-space:nowrap">S'abonner</button>
-        </div>
-      </div>
-    </div>
-    <hr style="border-color:rgba(255,255,255,.1);margin:36px 0 20px">
-    <p style="text-align:center;font-size:13px">© 2026 Monecome — Le shopping réinventé 🧡</p>
-  </div>
-</footer>
+<router-outlet></router-outlet>

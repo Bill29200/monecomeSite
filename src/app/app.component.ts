@@ -11,31 +11,17 @@ import { Router, NavigationEnd } from '@angular/router';
 export class AppComponent implements OnInit {
   title = 'monecome';
   cartCount: number = 0;
-  private isHome: boolean = true;
 
   constructor(
     private authService: AuthService,
     private vendeurAuthService: VendeurAuthService,
     private router: Router
   ) {
-    // Détecter la route actuelle
-    this.router.events.subscribe(event => {
-      if (event instanceof NavigationEnd) {
-        this.isHome = event.url === '/' || event.url === '';
-        this.updateCartCount();
-      }
-    });
-  }
-
-  ngOnInit() {
     this.updateCartCount();
-    // Écouter les changements du panier
     window.addEventListener('storage', () => this.updateCartCount());
   }
 
-  isHomePage(): boolean {
-    return this.isHome;
-  }
+  ngOnInit() {}
 
   updateCartCount() {
     const cart = JSON.parse(localStorage.getItem('cart') || '[]');
@@ -68,21 +54,6 @@ export class AppComponent implements OnInit {
     return name.charAt(0).toUpperCase();
   }
 
-  getUserRole(): string {
-    const user = this.authService.getCurrentUser();
-    const vendeur = this.vendeurAuthService.getCurrentVendeur();
-    
-    if (vendeur) {
-      return 'Vendeur';
-    }
-    if (user) {
-      if (user.role === 'admin') return 'Administrateur';
-      if (user.role === 'vendeur') return 'Vendeur';
-      return 'Client';
-    }
-    return '';
-  }
-
   getDashboardLink(): string {
     const user = this.authService.getCurrentUser();
     const vendeur = this.vendeurAuthService.getCurrentVendeur();
@@ -96,19 +67,13 @@ export class AppComponent implements OnInit {
     return '/';
   }
 
-  isVendeur(): boolean {
-    const user = this.authService.getCurrentUser();
-    const vendeur = this.vendeurAuthService.getCurrentVendeur();
-    return !!(vendeur || user?.role === 'vendeur');
-  }
-
   async logout() {
     if (this.vendeurAuthService.isLoggedIn()) {
       await this.vendeurAuthService.logout();
     } else {
       await this.authService.logout();
     }
-    this.router.navigate(['/']);
+    this.router.navigate(['/login']);
     this.updateCartCount();
   }
 }

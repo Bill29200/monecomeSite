@@ -1,85 +1,262 @@
+/* Import Bootstrap */
 @import 'bootstrap/dist/css/bootstrap.min.css';
 
-/* ══ Variables Orange Moderne ══════════════════════════════════════════════ */
+/* ============================================
+   THEME GRIS CLAIR MODERNE
+   ============================================ */
+
 :root {
-  --primary:          #ff6b35;
-  --primary-dark:     #e8541f;
-  --primary-light:    #14b8a6; /* gardé pour les accents vendeur */
-  --primary-gradient: linear-gradient(135deg, #ff6b35 0%, #ff9a5c 100%);
-  --bg-light:         #f8fafc;
-  --bg-white:         #ffffff;
-  --text-dark:        #1e293b;
-  --text-gray:        #64748b;
-  --border:           #e2e8f0;
-  --shadow:           0 1px 3px rgba(0,0,0,0.06);
-  --shadow-hover:     0 8px 25px rgba(255,107,53,0.15);
-  --orange-glow:      0 0 0 3px rgba(255,107,53,0.18);
+  /* Couleur d'accent - Orange */
+  --primary: #ea580c;
+  --primary-dark: #c2410c;
+  --primary-light: #f97316;
+  --primary-gradient: linear-gradient(135deg, #ea580c 0%, #f97316 100%);
+  --primary-gradient-dark: linear-gradient(135deg, #c2410c 0%, #ea580c 100%);
+  --primary-bg: rgba(234, 88, 12, 0.1);
+  
+  /* Gris clair */
+  --bg-main: #f5f5f5;
+  --bg-sidebar: #2d2d2d;
+  --bg-card: #ffffff;
+  --text-dark: #333333;
+  --text-gray: #666666;
+  --text-light: #999999;
+  --border: #e0e0e0;
+  --border-light: #eeeeee;
+  --shadow: 0 1px 3px rgba(0,0,0,0.08);
+  --shadow-hover: 0 8px 25px rgba(0,0,0,0.1);
 }
 
-* { margin: 0; padding: 0; box-sizing: border-box; }
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: var(--bg-light);
+  background: var(--bg-main);
   color: var(--text-dark);
 }
 
-/* ── Boutons Bootstrap ─────────────────────────────────────────────────── */
+/* ============================================
+   BOUTONS
+   ============================================ */
 .btn-primary {
-  background: var(--primary) !important;
-  border-color: var(--primary) !important;
-  font-weight: 600;
-  transition: all 0.25s;
+  background: var(--primary-gradient);
+  border: none;
+  padding: 0.5rem 1.2rem;
+  font-weight: 500;
+  transition: all 0.2s;
+  color: white;
 }
-.btn-primary:hover, .btn-primary:focus {
-  background: var(--primary-dark) !important;
-  border-color: var(--primary-dark) !important;
+
+.btn-primary:hover {
+  background: var(--primary-gradient-dark);
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(255,107,53,0.35) !important;
+  box-shadow: 0 2px 8px rgba(234,88,12,0.3);
 }
-.btn-primary:disabled { opacity: 0.65; transform: none; }
 
 .btn-outline-primary {
-  color: var(--primary) !important;
-  border-color: var(--primary) !important;
+  border-color: var(--primary);
+  color: var(--primary);
+  background: transparent;
 }
+
 .btn-outline-primary:hover {
-  background: var(--primary) !important;
-  border-color: var(--primary) !important;
-  color: white !important;
+  background: var(--primary);
+  border-color: var(--primary);
+  color: white;
 }
 
-/* ── Formulaires ─────────────────────────────────────────────────────────── */
-.form-control, .form-select {
-  border-radius: 10px;
-  border: 1.5px solid var(--border);
-  padding: 10px 14px;
-  transition: border-color 0.2s, box-shadow 0.2s;
-}
-.form-control:focus, .form-select:focus {
-  border-color: var(--primary) !important;
-  box-shadow: var(--orange-glow) !important;
-  outline: none;
+.btn-secondary {
+  background: #6c757d;
+  border: none;
 }
 
-/* ── Cards ───────────────────────────────────────────────────────────────── */
+.btn-secondary:hover {
+  background: #5a6268;
+}
+
+/* ============================================
+   NAVBAR
+   ============================================ */
+.navbar {
+  background: var(--bg-sidebar) !important;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.navbar .btn-outline-light {
+  border-color: rgba(255,255,255,0.2);
+  color: white;
+}
+
+.navbar .btn-outline-light:hover {
+  background: rgba(255,255,255,0.1);
+  border-color: rgba(255,255,255,0.3);
+}
+
+.navbar .btn-primary {
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.2);
+}
+
+.navbar .btn-primary:hover {
+  background: rgba(255,255,255,0.25);
+}
+
+/* ============================================
+   CARDS
+   ============================================ */
 .card {
-  border-radius: 14px;
+  border-radius: 12px;
   border: 1px solid var(--border);
+  background: var(--bg-card);
   box-shadow: var(--shadow);
-  transition: transform 0.25s, box-shadow 0.25s;
+  transition: all 0.2s;
 }
+
 .card:hover {
-  transform: translateY(-3px);
+  transform: translateY(-2px);
   box-shadow: var(--shadow-hover);
 }
 
-/* ── Scrollbar ───────────────────────────────────────────────────────────── */
-::-webkit-scrollbar { width: 7px; height: 7px; }
-::-webkit-scrollbar-track { background: var(--border); border-radius: 10px; }
-::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
-::-webkit-scrollbar-thumb:hover { background: var(--primary-dark); }
+/* ============================================
+   BADGES
+   ============================================ */
+.badge-primary {
+  background: var(--primary);
+}
 
-/* ── Alertes ─────────────────────────────────────────────────────────────── */
-.alert-success { background: #fff3ee; border-color: #ffddcc; color: var(--primary-dark); }
-.alert-warning { background: #fef3c7; border-color: #fde68a; color: #92400e; }
+.badge-success {
+  background: #10b981;
+}
+
+.badge-warning {
+  background: #f59e0b;
+}
+
+.badge-info {
+  background: #3b82f6;
+}
+
+/* ============================================
+   ALERTES
+   ============================================ */
+.alert-success {
+  background: #ecfdf5;
+  border-color: #a7f3d0;
+  color: #047857;
+}
+
+.alert-warning {
+  background: #fffbeb;
+  border-color: #fde68a;
+  color: #b45309;
+}
+
+.alert-danger {
+  background: #fef2f2;
+  border-color: #fecaca;
+  color: #dc2626;
+}
+
+/* ============================================
+   LIENS
+   ============================================ */
+a:not(.btn):not(.nav-link):not(.dropdown-item) {
+  color: var(--primary);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+a:not(.btn):not(.nav-link):not(.dropdown-item):hover {
+  color: var(--primary-dark);
+  text-decoration: underline;
+}
+
+.text-primary {
+  color: var(--primary) !important;
+}
+
+/* ============================================
+   FORMULAIRES
+   ============================================ */
+.form-control,
+.form-select {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.5rem 0.75rem;
+  transition: all 0.2s;
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(234,88,12,0.15);
+  outline: none;
+}
+
+/* ============================================
+   TABLES
+   ============================================ */
+.table {
+  background: var(--bg-card);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.table thead th {
+  background: #f8f9fa;
+  border-bottom: 2px solid var(--border);
+  color: var(--text-dark);
+  font-weight: 600;
+}
+
+/* ============================================
+   SCROLLBAR
+   ============================================ */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #e0e0e0;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-dark);
+}
+
+/* ============================================
+   UTILITAIRES
+   ============================================ */
+.bg-gradient-primary {
+  background: var(--primary-gradient) !important;
+}
+
+.btn-gradient {
+  background: var(--primary-gradient);
+  color: white;
+  border: none;
+}
+
+.btn-gradient:hover {
+  background: var(--primary-gradient-dark);
+  transform: translateY(-1px);
+}
+
+.bg-light-gray {
+  background: #f8f9fa;
+}
+
+.text-muted {
+  color: var(--text-light) !important;
+}
