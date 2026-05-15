@@ -32,6 +32,14 @@ export class VendeurLayoutComponent implements OnInit {
     this.vendeurEmail = vendeur?.email || '';
   }
 
+  getVendeurName(): string {
+    return this.vendeurNom;
+  }
+
+  getVendeurEmail(): string {
+    return this.vendeurEmail;
+  }
+
   async loadBoutiques() {
     this.boutiques = await this.vendeurService.getCurrentVendeurBoutiques();
     if (this.boutiques.length > 0) {
@@ -55,7 +63,7 @@ export class VendeurLayoutComponent implements OnInit {
 
   async logout() {
     await this.vendeurAuth.logout();
-    this.router.navigate(['/']);
+    this.router.navigate(['/login']);
   }
 
   getInitial(): string {

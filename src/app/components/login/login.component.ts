@@ -22,7 +22,7 @@ export class LoginComponent {
 
   async onLogin() {
     console.log('🔐 Tentative de connexion:', this.email);
-    
+
     this.loading = true;
     this.errorMessage = '';
 
@@ -42,13 +42,13 @@ export class LoginComponent {
       // Sinon, connexion normale (client ou admin)
       const user = await this.authService.login(this.email, this.password);
       console.log('✅ Connexion réussie:', user);
-      
+
       if (user) {
         if (user.role === 'admin') {
           console.log('👑 Redirection vers /admin');
           this.router.navigate(['/admin']);
         } else if (user.role === 'vendeur') {
-          console.log('🏪 Redirection vers /vendeur');
+          console.log(' 🛍️ Redirection vers /vendeur');
           this.router.navigate(['/vendeur']);
         } else {
           console.log('👤 Redirection vers /');

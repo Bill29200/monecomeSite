@@ -56,7 +56,7 @@ export class DashboardComponent implements OnInit {
   }
 
   sections = [
-    { title: 'Boutiques',   description: 'Gérer les boutiques et aperçus',  emoji: '🏪', route: '/admin/boutiques'   },
+    { title: 'Boutiques',   description: 'Gérer les boutiques et aperçus',  emoji: ' 🛍️', route: '/admin/boutiques'   },
     { title: 'Vendeurs',    description: 'Créer et gérer les vendeurs',      emoji: '👤', route: '/admin/vendeurs'    },
     { title: 'Abonnements', description: 'Configurer les packs et forfaits', emoji: '💳', route: '/admin/abonnements' },
     { title: 'Catégories',  description: 'Gérer les catégories produits',    emoji: '🏷️', route: '/admin/categories'  },

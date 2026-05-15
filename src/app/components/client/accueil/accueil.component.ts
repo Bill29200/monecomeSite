@@ -229,7 +229,7 @@ import { FirebaseService } from '../../../services/firebase.service';
                   <span class="badge-orange" style="font-size:11px">{{ p.category || p.categorie }}</span>
                   <h5 style="font-weight:700;margin:10px 0 5px;font-size:15px">{{ p.nom }}</h5>
                   <div style="font-size:13px;color:var(--gray);margin-bottom:14px">
-                    🏪 {{ getBoutiqueName(p.boutiqueId) }}
+                     🛍️ {{ getBoutiqueName(p.boutiqueId) }}
                   </div>
                   <div style="display:flex;align-items:center;justify-content:space-between">
                     <span style="font-size:20px;font-weight:800;color:var(--orange)">

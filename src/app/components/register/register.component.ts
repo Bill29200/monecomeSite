@@ -7,7 +7,7 @@ import { Component } from '@angular/core';
       <div style="max-width:480px;width:100%;margin:auto">
 
         <div style="text-align:center;margin-bottom:36px">
-          <span style="font-size:52px">🏪</span>
+          <span style="font-size:52px"> 🛍️</span>
           <h2 style="font-size:30px;font-weight:800;margin:14px 0 8px">Créer un compte</h2>
           <p style="color:var(--gray)">Rejoignez la communauté Monecome</p>
         </div>

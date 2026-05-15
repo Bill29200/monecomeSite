@@ -6,7 +6,7 @@ import { AuthService } from '../../core/services/auth.service';
   selector: 'app-admin-layout',
   template: `
     <div class="admin-layout"><aside class="admin-sidebar"><div class="sidebar-header"><h4>🛍️ Admin</h4></div>
-      <nav><a routerLink="/admin/dashboard" class="menu-item">📈 Dashboard</a><a routerLink="/admin/boutiques" class="menu-item">🏪 Boutiques</a>
+      <nav><a routerLink="/admin/dashboard" class="menu-item">📈 Dashboard</a><a routerLink="/admin/boutiques" class="menu-item"> 🛍️ Boutiques</a>
       <a routerLink="/admin/vendeurs" class="menu-item">👥 Vendeurs</a><a routerLink="/admin/abonnements" class="menu-item">💳 Abonnements</a></nav>
       <div class="sidebar-footer"><button class="btn-logout" (click)="logout()">🚪 Déconnexion</button></div>
     </aside><main class="admin-main"><router-outlet></router-outlet></main></div>

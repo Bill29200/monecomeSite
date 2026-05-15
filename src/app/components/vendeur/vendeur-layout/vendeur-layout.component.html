@@ -1,11 +1,30 @@
 <div class="vendeur-layout">
   <aside class="vendeur-sidebar">
     <div class="sidebar-header">
-      <div class="logo">🛍️ Vendeur</div>
+      <div class="logo">
+        <span class="logo-icon">🛍️</span>
+        <span class="logo-text">Vendeur Panel</span>
+      </div>
+    </div>
+
+    <!-- Informations vendeur -->
+    <div class="vendeur-info">
+      <div class="vendeur-avatar">
+        <i class="bi bi-person-badge"></i>
+      </div>
+      <div class="vendeur-details">
+        <div class="vendeur-name">{{ getVendeurName() }}</div>
+        <div class="vendeur-email">{{ getVendeurEmail() }}</div>
+        <span class="vendeur-badge">
+          <i class="bi bi-shop"></i> Vendeur
+        </span>
+      </div>
     </div>
 
     <div class="boutique-selector" *ngIf="boutiques.length > 0">
-      <label>Boutique active</label>
+      <label>
+        <i class="bi bi-shop"></i> Boutique active
+      </label>
       <select (change)="selectBoutique(boutiques[$any($event.target).value])">
         <option *ngFor="let b of boutiques; let i = index" [value]="i" [selected]="boutiqueSelectionnee?.id === b.id">
           {{ b.nom }}
@@ -29,20 +48,14 @@
       <a routerLink="/vendeur/commandes" class="nav-item" routerLinkActive="active">
         <i class="bi bi-cart-check"></i> Commandes
       </a>
+      <div class="sidebar-footer">
+        <button class="btn-logout" (click)="logout()">
+          <i class="bi bi-box-arrow-right"></i> Déconnexion
+        </button>
+      </div>
     </nav>
 
-    <div class="sidebar-footer">
-      <div class="vendeur-info">
-        <div class="avatar">{{ getInitial() }}</div>
-        <div class="vendeur-details">
-          <div class="vendeur-name">{{ vendeurNom }}</div>
-          <div class="vendeur-email">{{ vendeurEmail }}</div>
-        </div>
-      </div>
-      <button class="btn-logout" (click)="logout()">
-        <i class="bi bi-box-arrow-right"></i> Déconnexion
-      </button>
-    </div>
+
   </aside>
 
   <main class="vendeur-main">
